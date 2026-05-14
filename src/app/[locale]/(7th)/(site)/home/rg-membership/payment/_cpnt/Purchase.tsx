@@ -1,0 +1,256 @@
+'use client'
+
+import { useOnLoadProductList } from '@/7th/_client/store/payment/purchase/hook'
+import { useFetchReloadStudentStudyState } from '@/7th/_client/store/student/info/hook'
+import {
+  useStudentInfo,
+  useStudentInfoMainPhone,
+} from '@/7th/_client/store/student/info/selector'
+import { useCustomerInfo } from '@/7th/_context/CustomerContext'
+import { useScreenMode, useStyle } from '@/7th/_ui/context/StyleContext'
+import SITE_PATH from '@/app/site-path'
+import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
+import useTranslation from '@/localization/client/useTranslations'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import BillPaper from './BillPaper'
+import PayMethodList from './PayMethod'
+import PayerInfo from './PayerInfo'
+import PaymentStudentInfo from './PaymentStudentInfo'
+import ProductCardList from './ProductCard'
+import PurchaseProcess, { PurchaseRequest } from './PurchaseProcess'
+
+const STYLE_ID = 'page_purchase'
+
+export default function Purchase({
+  purchaseType,
+  isChangeUserInfo = false,
+}: {
+  purchaseType: 'direct' | 'directvn' | 'ios' | 'android'
+  isChangeUserInfo?: boolean
+}) {
+  const style = useStyle(STYLE_ID)
+
+  // @Language 'common'
+  const { t } = useTranslation()
+
+  const router = useRouter()
+  const isMobile = useScreenMode() === 'mobile'
+
+  const studentId = useStudentInfo().studentId
+  const customerId = useCustomerInfo().customerId
+  const userPhone = useStudentInfoMainPhone()
+
+  const { loading, error, payload } = useOnLoadProductList(purchaseType)
+  const { loading: reloadStudentStudyLoading, fetch: reloadStudentStudy } =
+    useFetchReloadStudentStudyState()
+
+  const [selectItem, setSelectItem] = useState<string | undefined>(undefined)
+  const [payMethod, setPayMethod] = useState<string | undefined>(undefined)
+  const [isPolicyAgree, setPolicyAgree] = useState(!isChangeUserInfo)
+  const [paymentInfo, setPaymentInfo] = useState<PurchaseRequest | undefined>(
+    undefined,
+  )
+
+  const maketingEventTracker = useTrack()
+  useEffect(() => {
+    if (payload && selectItem) {
+      const filteredItem = payload?.product?.filter(
+        (item) => item.id === selectItem,
+      )
+      if (filteredItem && filteredItem.length > 0) {
+        maketingEventTracker.eventAction('이용권 상품 조회', {
+          catagory_id:
+            purchaseType === 'direct' || purchaseType === 'directvn'
+              ? 'web'
+              : purchaseType,
+          product_id: filteredItem[0].name,
+        })
+      }
+    }
+  }, [maketingEventTracker, payload, selectItem, purchaseType])
+
+  const onProductClick = (itemId: string) => {
+    setSelectItem(itemId)
+  }
+
+  const onPaymethodClick = (payMethod: string) => {
+    setPayMethod(payMethod)
+  }
+
+  const onBuyClick = () => {
+    if (!targetProduct) {
+      alert(t('t690')) // 구매하실 이용권을 선택해주세요.
+      return
+    }
+    if (!userPhone) {
+      alert(t('t691')) // 연락처를 입력해주세요.
+      return
+    }
+    if (!isPolicyAgree) {
+      alert(t('t692')) // 결제를 진행하기 위해서는 개인정보 수집에 동의하셔야 합니다.
+      return
+    }
+    if (!payMethod) {
+      alert(t('t693')) // 결제 수단을 선택해주세요.
+      return
+    }
+
+    if (targetProduct) {
+      const name = targetProduct.name
+      const price = targetProduct.totalFee
+      const param = {
+        customerId,
+        studentId,
+        payMethod,
+        productName: name,
+        price,
+        mobileYn: isMobile ? 'Y' : 'N',
+      }
+      maketingEventTracker.eventAction('결제 시작', {
+        product_id: targetProduct.name,
+        total_price: price,
+      })
+      maketingEventTracker.eventAction('이용권 결제하기 클릭', {
+        catagory:
+          purchaseType === 'direct' || purchaseType === 'directvn'
+            ? 'web'
+            : purchaseType,
+        product_id: targetProduct.id,
+        product_name: targetProduct.name,
+        price: targetProduct.totalFee,
+        currency: currency,
+        subscription_type: targetProduct.name,
+      })
+      setPaymentInfo(param)
+    }
+  }
+
+  const onPaymentResult = ({
+    isSuccess,
+    code,
+    message,
+  }: {
+    isSuccess: boolean
+    code: number
+    message: string
+  }) => {
+    if (isSuccess) {
+      reloadStudentStudy({
+        callback: (isSuccess) => {
+          if (isSuccess) {
+            alert(t('t694')) // 결제가 완료 되었습니다.
+            router.push(SITE_PATH.HOME.MEMBERSHIP_PAYMENT_HISTORY)
+          } else {
+            alert(t('t695')) // 사용자정보를 조회하는데 실패하였습니다.
+            setPaymentInfo(undefined)
+          }
+        },
+      })
+    } else {
+      alert(message)
+      setPaymentInfo(undefined)
+    }
+  }
+
+  if (loading) {
+    return <div></div>
+  }
+  const filteredItem = payload?.product?.filter(
+    (item) => item.id === selectItem,
+  )
+  const currency = payload?.currency || 'KRW'
+  const targetProduct =
+    filteredItem && filteredItem.length > 0 ? filteredItem[0] : undefined
+
+  const isIncludeWorkbookItem = payload?.product?.some((item) =>
+    item.event?.gift?.toLowerCase().includes('workbook'),
+  )
+
+  return (
+    <div className={style.purchase}>
+      <PaymentStudentInfo STYLE_ID={STYLE_ID} />
+      <div className={style.page_container}>
+        <div className={style.col_left}>
+          <ProductCardList
+            STYLE_ID={STYLE_ID}
+            currency={currency}
+            product={payload?.product}
+            activeId={selectItem}
+            onProductClick={onProductClick}
+          />
+          {isIncludeWorkbookItem && (
+            <div
+              style={{
+                borderTop: 'none',
+                borderLeft: 'none',
+                borderRight: 'none',
+                borderBottom: '2px dotted var(--gray2)',
+                display: 'flex',
+                alignItems: 'center',
+                paddingBottom: '30px',
+              }}>
+              Việc giao sách wokrbook hoặc gia hạn thời gian sẽ được xử lý khi
+              bạn liên hệ với Chăm sóc khách hàng của Reading Gate sau khi thanh
+              toán.
+            </div>
+          )}
+          {selectItem && (
+            <>
+              <PayerInfo
+                STYLE_ID={STYLE_ID}
+                isChangeUserInfo={isChangeUserInfo}
+                onPolicyAgreeChange={(checked) => {
+                  setPolicyAgree(checked)
+                }}
+              />
+              {purchaseType !== 'android' && purchaseType !== 'ios' && (
+                <PayMethodList
+                  STYLE_ID={STYLE_ID}
+                  methodList={payload?.payType.filter((p) => {
+                    // MEMO : 무통장입금 미구현(결제 모듈 미구현 이슈)
+                    return p !== 'paypal' && p !== 'vbank'
+                  })}
+                  activeMethod={payMethod}
+                  onPayMethodClick={onPaymethodClick}
+                />
+              )}
+            </>
+          )}
+        </div>
+        <div className={style.col_right}>
+          <BillPaper
+            STYLE_ID={STYLE_ID}
+            currency={currency}
+            product={targetProduct}
+            active={
+              !!targetProduct && !!userPhone && isPolicyAgree && !!payMethod
+            }
+            onBuyClick={onBuyClick}
+          />
+        </div>
+      </div>
+      {paymentInfo && (
+        <PurchaseProcess
+          request={paymentInfo}
+          currency={currency}
+          onPurchaseResult={onPaymentResult}
+          onCancel={() => {
+            maketingEventTracker.eventAction('구매 취소', {
+              product_id: paymentInfo.productName,
+              cancel_reason: '사용자 취소',
+            })
+            maketingEventTracker.eventAction('결제 취소', {
+              product_name: paymentInfo.productName,
+              price: paymentInfo.price,
+              currency: currency,
+              subscription_type: paymentInfo.productName,
+              cancel_reason: '사용자 취소',
+            })
+            setPaymentInfo(undefined)
+          }}
+        />
+      )}
+    </div>
+  )
+}
