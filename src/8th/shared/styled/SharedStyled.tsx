@@ -22,37 +22,37 @@ import {
 
 // Display None을 위한 스타일 컴포넌트
 export const DisplayNoneStyle = styled.div<{
-  hideOnLabtopL?: boolean
-  hideOnLabtopS?: boolean
-  hideOnTabletL?: boolean
-  hideOnTabletS?: boolean
-  hideOnPhone?: boolean
-  hideOnPc?: boolean
+  $hideOnLabtopL?: boolean
+  $hideOnLabtopS?: boolean
+  $hideOnTabletL?: boolean
+  $hideOnTabletS?: boolean
+  $hideOnPhone?: boolean
+  $hideOnPc?: boolean
 }>`
-  ${({ hideOnLabtopL }) => hideOnLabtopL && displayNoneLabtopL('')}
-  ${({ hideOnLabtopS }) => hideOnLabtopS && displayNoneLabtopS('')}
-  ${({ hideOnTabletL }) => hideOnTabletL && displayNoneTabletL('')}
-  ${({ hideOnTabletS }) => hideOnTabletS && displayNoneTabletS('')}
-  ${({ hideOnPhone }) => hideOnPhone && displayNonePhone('')}
-  ${({ hideOnPc }) => hideOnPc && displayNonePc('')}
+  ${({ $hideOnLabtopL }) => $hideOnLabtopL && displayNoneLabtopL('')}
+  ${({ $hideOnLabtopS }) => $hideOnLabtopS && displayNoneLabtopS('')}
+  ${({ $hideOnTabletL }) => $hideOnTabletL && displayNoneTabletL('')}
+  ${({ $hideOnTabletS }) => $hideOnTabletS && displayNoneTabletS('')}
+  ${({ $hideOnPhone }) => $hideOnPhone && displayNonePhone('')}
+  ${({ $hideOnPc }) => $hideOnPc && displayNonePc('')}
 `
 
 // Display Block을 위한 스타일 컴포넌트
 export const DisplayBlockStyle = styled.div<{
-  showOnLabtopL?: boolean
-  showOnLabtopS?: boolean
-  showOnTabletL?: boolean
-  showOnTabletS?: boolean
-  showOnPhone?: boolean
-  showOnPc?: boolean
+  $showOnLabtopL?: boolean
+  $showOnLabtopS?: boolean
+  $showOnTabletL?: boolean
+  $showOnTabletS?: boolean
+  $showOnPhone?: boolean
+  $showOnPc?: boolean
 }>`
   display: none; /* 기본적으로 숨김 */
-  ${({ showOnLabtopL }) => showOnLabtopL && displayBlockLabtopL('')}
-  ${({ showOnLabtopS }) => showOnLabtopS && displayBlockLabtopS('')}
-  ${({ showOnTabletL }) => showOnTabletL && displayBlockTabletL('')}
-  ${({ showOnTabletS }) => showOnTabletS && displayBlockTabletS('')}
-  ${({ showOnPhone }) => showOnPhone && displayBlockPhone('')}
-  ${({ showOnPc }) => showOnPc && displayBlockPc('')}
+  ${({ $showOnLabtopL }) => $showOnLabtopL && displayBlockLabtopL('')}
+  ${({ $showOnLabtopS }) => $showOnLabtopS && displayBlockLabtopS('')}
+  ${({ $showOnTabletL }) => $showOnTabletL && displayBlockTabletL('')}
+  ${({ $showOnTabletS }) => $showOnTabletS && displayBlockTabletS('')}
+  ${({ $showOnPhone }) => $showOnPhone && displayBlockPhone('')}
+  ${({ $showOnPc }) => $showOnPc && displayBlockPc('')}
 `
 
 export const ActionBarHeaderStyle = styled.div`
@@ -946,7 +946,7 @@ export const DropdownSmallItemStyle = styled.div<{
   }
 `
 
-export const GlobalNavBarStyle = styled.div<{ zIndex?: number }>`
+export const GlobalNavBarStyle = styled.div<{ $zIndex?: number }>`
   width: 288px;
   height: 100vh;
   background-color: #fff;
@@ -954,7 +954,7 @@ export const GlobalNavBarStyle = styled.div<{ zIndex?: number }>`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: ${({ zIndex }) => zIndex || 100};
+  z-index: ${({ $zIndex }) => $zIndex || 100};
   padding: 10px;
   padding-top: 30px;
   display: flex;
@@ -986,8 +986,11 @@ export const GlobalNavBarStyle = styled.div<{ zIndex?: number }>`
   `)}
 
   .logo-container {
-    width: 188px;
+    width: 100%;
     height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     ${labtopL(`
       display: none;
@@ -995,8 +998,14 @@ export const GlobalNavBarStyle = styled.div<{ zIndex?: number }>`
 
     .logo {
       display: block;
-      width: 100%;
-      height: auto;
+      width: auto;
+      height: 30px;
+    }
+
+    .dnf-logo {
+      display: block;
+      width: auto;
+      height: 35px;
     }
   }
 
@@ -1126,7 +1135,106 @@ export const MobileMoreMenuItemBoxStyle = styled.div`
   background-color: black;
 `
 
-export const BoxStyled = styled.div<{
+const BOX_STYLED_PROPS = new Set([
+  'padding',
+  'margin',
+  'width',
+  'height',
+  'minWidth',
+  'maxWidth',
+  'minHeight',
+  'maxHeight',
+  'border',
+  'borderRadius',
+  'borderTopLeftRadius',
+  'borderTopRightRadius',
+  'borderBottomLeftRadius',
+  'borderBottomRightRadius',
+  'borderStyle',
+  'borderWidth',
+  'borderTop',
+  'borderRight',
+  'borderBottom',
+  'borderLeft',
+  'borderColor',
+  'position',
+  'top',
+  'right',
+  'bottom',
+  'left',
+  'zIndex',
+  'backgroundColor',
+  'backgroundImage',
+  'backgroundSize',
+  'backgroundPosition',
+  'backgroundRepeat',
+  'backgroundAttachment',
+  'backgroundClip',
+  'backgroundOrigin',
+  'overflow',
+  'overflowX',
+  'overflowY',
+  'boxShadow',
+  'transform',
+  'opacity',
+  'visibility',
+  'cursor',
+  'textAlign',
+  'lineHeight',
+  'letterSpacing',
+  'wordSpacing',
+  'textDecoration',
+  'textTransform',
+  'whiteSpace',
+  'wordBreak',
+  'textOverflow',
+  'verticalAlign',
+  'boxSizing',
+  'display',
+  'flexDirection',
+  'alignItems',
+  'justifyContent',
+  'flexWrap',
+  'gap',
+  'flex',
+  'flexGrow',
+  'flexShrink',
+  'flexBasis',
+  'gridTemplateColumns',
+  'gridTemplateRows',
+  'gridTemplateAreas',
+  'gridAutoColumns',
+  'gridAutoRows',
+  'gridAutoFlow',
+  'placeItems',
+  'placeContent',
+  'transition',
+  'transitionProperty',
+  'transitionDuration',
+  'transitionTimingFunction',
+  'transitionDelay',
+  'animation',
+  'animationName',
+  'animationDuration',
+  'animationTimingFunction',
+  'animationDelay',
+  'animationIterationCount',
+  'animationDirection',
+  'animationFillMode',
+  'animationPlayState',
+  'scrollBehavior',
+  'scrollbarWidth',
+  'scrollbarColor',
+  'hover',
+  'focus',
+  'active',
+  'before',
+  'after',
+])
+
+export const BoxStyled = styled.div.withConfig({
+  shouldForwardProp: (prop) => !BOX_STYLED_PROPS.has(prop),
+})<{
   onClick?: () => void
   padding?: string
   margin?: string

@@ -147,6 +147,14 @@ const STUDENT_8TH = {
   ACCOUNTINFO_SETTING: '/8th/accountinfo/setting',
 }
 
+const DODON_FRIENDS = {
+  MY_CLASS: '/8th/dodonfriends/myclass',
+  MY_LESSON: '/8th/dodonfriends/myclass/mylesson',
+  MY_LESSON_DAY: '/8th/dodonfriends/myclass/mylesson/day',
+  CLASSES: '/8th/dodonfriends/myclass/classes',
+  CLASSES_LIST: '/8th/dodonfriends/myclass/classes/classeslist',
+}
+
 export const STAFF_PATH = {
   MAIN: '/staff',
   MIRAGE: '/mirage',
@@ -280,5 +288,6 @@ const SITE_PATH = {
   CATALOG,
   CATALOG_VI,
   STUDENT_8TH,
+  DODON_FRIENDS,
 }
 export default SITE_PATH

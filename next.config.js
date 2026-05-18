@@ -5,12 +5,12 @@ const nextConfig = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "wcfresource.a1edu.com",
+        protocol: 'https',
+        hostname: 'wcfresource.a1edu.com',
       },
       {
-        protocol: "http",
-        hostname: "wcfresource.a1edu.com",
+        protocol: 'http',
+        hostname: 'wcfresource.a1edu.com',
       },
     ],
   },
@@ -21,30 +21,30 @@ const nextConfig = {
         has: [
           {
             type: 'query',
-            key:'CoursesName'
-          }
+            key: 'CoursesName',
+          },
         ],
         destination: 'https://util.readinggate.com/Library/DodoABCWorkSheetMP3',
-        permanent: false
+        permanent: false,
       },
       {
         source: '/Library/DodoABCWorkSheetQR',
         has: [
           {
             type: 'query',
-            key:'LevelName'
-          }
+            key: 'LevelName',
+          },
         ],
         destination: 'https://util.readinggate.com/Library/DodoABCWorkSheetQR',
-        permanent: false
+        permanent: false,
       },
       {
         source: '/Main/Index',
         destination: '/',
-        permanent: false
-      }
+        permanent: false,
+      },
     ]
-  }
-};
+  },
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

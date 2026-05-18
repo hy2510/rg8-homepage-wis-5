@@ -31,7 +31,7 @@ const MP3_URL = {
   pk: 'https://wcfresource.a1edu.com/NewSystem/AppMobile/webview/randing/prek_workbook_mp3/',
 }
 
-export default function GlobalNavBar() {
+export default function GlobalNavBarDnf() {
   // @Language 'common'
   const { t } = useTranslation()
 
@@ -161,17 +161,21 @@ export default function GlobalNavBar() {
         <Link
           href={'#'}
           onClick={() => (window.location.href = SITE_PATH.HOME.MAIN)}>
-          <Image src={Assets.Image.AppLogo} alt="App Logo" className="logo" />
+          <Image
+            src={Assets.Image.AppLogoDnf}
+            alt="App Logo"
+            className="dnf-logo"
+          />
         </Link>
       </div>
 
       <div className="menu-container">
         {menu.dailyRg.open && (
           <MenuItem
-            icon={Assets.Icon.Gnb.readingPath}
-            text="RG TRACK"
-            isActive={pathname.includes(SITE_PATH.STUDENT_8TH.DAILY_RG)}
-            linkUrl={SITE_PATH.STUDENT_8TH.DAILY_RG}
+            icon={Assets.Icon.Gnb.myClass}
+            text="MY CLASS"
+            isActive={pathname.includes(SITE_PATH.DODON_FRIENDS.MY_CLASS)}
+            linkUrl={SITE_PATH.DODON_FRIENDS.MY_LESSON}
           />
         )}
 
@@ -205,6 +209,13 @@ export default function GlobalNavBar() {
           />
         )} */}
 
+        <MenuItem
+          icon={Assets.Icon.Gnb.movies}
+          text="MOVIES"
+          isActive={pathname.includes(SITE_PATH.STUDENT_8TH.ACTIVITY)}
+          linkUrl={SITE_PATH.STUDENT_8TH.ACTIVITY}
+        />
+
         {menu.activity.open && (
           <MenuItem
             icon={Assets.Icon.Gnb.myActivity}
@@ -216,15 +227,13 @@ export default function GlobalNavBar() {
 
         {menu.calendar.open && (
           <DisplayNoneStyle $hideOnLabtopS>
-            {/* // 더빙룸 메뉴 제거
-          <div className="divider" />
-          <Gap size={10} />
-          <MenuItem icon={Assets.Icon.Gnb.dubbing} text="DUBBING" /> 
-          */}
+            <div className="divider" />
+            <Gap size={10} />
+            <MenuItem icon={Assets.Icon.Gnb.dubbing} text="DUBBING" />
             <Gap size={10} />
             <div className="divider" />
             <Gap size={10} />
-            <MenuItemCalendar
+            {/* <MenuItemCalendar
               text="CALENDAR"
               onClick={() => {
                 maketingEventTracker.eventAction('GNB 탭 클릭', {
@@ -233,7 +242,7 @@ export default function GlobalNavBar() {
                 })
                 setCalendarOpen(true)
               }}
-            />
+            /> */}
           </DisplayNoneStyle>
         )}
 

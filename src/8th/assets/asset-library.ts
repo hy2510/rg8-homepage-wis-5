@@ -1,4 +1,5 @@
 import { getDodoFriendsStory } from './dodo-story'
+import AppLogoDnf from './images/app-logo-dnf.png'
 import AppLogo from './images/app-logo.png'
 import challengeBest from './images/award/challenge/best_lg.svg'
 import challengeExcellence from './images/award/challenge/excellence_lg.svg'
@@ -135,6 +136,7 @@ import schoolSubjects from './images/icons/collections/school.png'
 import series from './images/icons/collections/series.png'
 import theme from './images/icons/collections/theme.png'
 import workbook from './images/icons/collections/workbook.png'
+import cornerLeftUpGray from './images/icons/corner-left-up-gray.svg'
 import counterMinus from './images/icons/counter-minus.png'
 import counterPlus from './images/icons/counter-plus.png'
 import deleteWhite from './images/icons/delete-white.svg'
@@ -150,7 +152,9 @@ import dubbing from './images/icons/gnb/dubbing.png'
 import ebooks from './images/icons/gnb/ebooks.png'
 import main from './images/icons/gnb/main.png'
 import more from './images/icons/gnb/more.png'
+import movies from './images/icons/gnb/movies.png'
 import myActivity from './images/icons/gnb/my-activity.png'
+import myClass from './images/icons/gnb/my-class.png'
 import readingPath from './images/icons/gnb/reading-path.png'
 import lockWhite from './images/icons/lock-white.svg'
 import lock from './images/icons/lock.svg'
@@ -160,6 +164,7 @@ import minusBlue from './images/icons/minus-blue.png'
 import moreHorizontalGray from './images/icons/more-horizontal-gray.svg'
 import moreHorizontalWhite from './images/icons/more-horizontal-white.svg'
 import moreVerticalGray from './images/icons/more-vertical-gray.svg'
+import addedCalendar from './images/icons/myclass/added-calendar.png'
 import playRed from './images/icons/play-red.png'
 import plusGreen from './images/icons/plus-green.png'
 import replayBtn from './images/icons/replay-btn.png'
@@ -183,6 +188,9 @@ import collections from './images/icons/study/collections.png'
 import homeworkMark from './images/icons/study/homework-mark.png'
 import inProgressMarkInTodo from './images/icons/study/in-progress-mark-in-todo.png'
 import inProgressMark from './images/icons/study/in-progress-mark.png'
+import lessonCheckRed from './images/icons/study/lesson-check-red.svg'
+import lessonCheckWhite from './images/icons/study/lesson-check-white.svg'
+import lessonCheckYellow from './images/icons/study/lesson-check-yellow.svg'
 import leveledReading from './images/icons/study/leveled-reading.png'
 import recentlyViewed from './images/icons/study/recently-viewed.png'
 import ZoomIn from './images/icons/zoom-in.png'
@@ -244,6 +252,7 @@ import LoadingDodo from './images/welcome-dodo.png'
 export const Assets = {
   Image: {
     AppLogo: AppLogo,
+    AppLogoDnf: AppLogoDnf,
     GlossyBg: GlossyBg,
     GlossyBgBigWhite: GlossyBgBigWhite,
     GlossyBgSmall: GlossyBgSmall,
@@ -278,6 +287,7 @@ export const Assets = {
     chevronLeftGray: chevronLeftGray,
     counterMinus: counterMinus,
     counterPlus: counterPlus,
+    cornerLeftUpGray: cornerLeftUpGray,
     downloadLightBlue: downloadLightBlue,
     EditGray: EditGray,
     SettingsGray: SettingsGray,
@@ -310,6 +320,8 @@ export const Assets = {
       readingPath: readingPath,
       more: more,
       myActivity: myActivity,
+      movies: movies,
+      myClass: myClass,
     },
     Side: {
       booksRead: booksRead,
@@ -328,6 +340,9 @@ export const Assets = {
     Study: {
       checkMarkGoldTwin: checkMarkGoldTwin,
       checkMarkGold: checkMarkGold,
+      lessonCheckWhite: lessonCheckWhite,
+      lessonCheckYellow: lessonCheckYellow,
+      lessonCheckRed: lessonCheckRed,
       inProgressMark: inProgressMark,
       inProgressMarkInTodo: inProgressMarkInTodo,
       homeworkMark: homeworkMark,
@@ -340,6 +355,7 @@ export const Assets = {
       newBooks: newBooks,
       series: series,
       schoolSubjects: schoolSubjects,
+      addedCalendar: addedCalendar,
     },
     Ranking: {
       rank1Bg: rank1Bg,
@@ -413,6 +429,7 @@ export const Assets = {
       dailyGoal1050: dailyGoal1050,
     },
   },
+
   Thumbnail: {
     ClassicAlphabetStudy: ClassicAlphabetStudy,
     ClassicPhonicsStudy: ClassicPhonicsStudy,
@@ -431,6 +448,7 @@ export const Assets = {
     SightWord2Game: SightWord2Game,
     NurseryRhyme: NurseryRhyme,
   },
+
   Challenge: {
     best: challengeBest,
     excellence: challengeExcellence,
