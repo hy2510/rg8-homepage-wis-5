@@ -21,12 +21,12 @@ interface StudentProfileCardDnfProps {
   rank: number
   book: number
   point: number
-  todo: number
+  assignments: number
   favorite: number
-  isOpenTodo: boolean
+  isOpenAssignments: boolean
   isOpenFavorite: boolean
   medal?: 'bronze' | 'silver' | 'gold' | 'platinum' | 'titanium'
-  onLinkClick?: (linkId: 'activity' | 'todo' | 'favorite') => void
+  onLinkClick?: (linkId: 'activity' | 'assignments' | 'favorite') => void
 }
 
 export default function StudentProfileCardDnf({
@@ -37,9 +37,9 @@ export default function StudentProfileCardDnf({
   rank,
   book,
   point,
-  todo,
+  assignments,
   favorite,
-  isOpenTodo = true,
+  isOpenAssignments = true,
   isOpenFavorite = true,
   medal,
   onLinkClick,
@@ -115,7 +115,7 @@ export default function StudentProfileCardDnf({
             {t('t8th248')}
           </div>
           <div className="value">{NumberUtils.toRgDecimalPoint(point)}P</div>
-          {isOpenTodo && (
+          {isOpenAssignments && (
             <>
               <div className="label">
                 <Image
@@ -125,16 +125,16 @@ export default function StudentProfileCardDnf({
                   height={28}
                 />
                 {/* {t('t8th268')} */}
-                Homework
+                Assignments
               </div>
               <div
                 className="value link"
                 onClick={() => {
                   if (onLinkClick) {
-                    onLinkClick('todo')
+                    onLinkClick('assignments')
                   }
                 }}>
-                {todo}
+                {assignments}
               </div>
             </>
           )}

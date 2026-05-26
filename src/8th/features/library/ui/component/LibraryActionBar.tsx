@@ -10,7 +10,7 @@ import { ReactNode } from 'react'
 
 export type { ActionBarDropdownItem } from '@/8th/shared/ui/ActionBar'
 
-interface ActionBarProps {
+export interface LibraryActionBarProps {
   title?: string
   count?: number
   headerContent?: ReactNode
@@ -31,7 +31,7 @@ export default function LibraryActionBar({
   headerContent,
   dropdowns,
   exportPanel,
-}: ActionBarProps) {
+}: LibraryActionBarProps) {
   const isPhone = useIsPhone()
 
   return (
@@ -41,7 +41,7 @@ export default function LibraryActionBar({
         <>
           <BoxStyle display="flex" alignItems="center" gap={10}>
             <TextStyle fontSize="large" fontFamily="sans" fontWeight="bolder">
-              {title}
+              Book List
             </TextStyle>
             {count >= 0 && (
               <TextStyle

@@ -5,6 +5,7 @@ import {
   useCustomerInfo,
 } from '@/8th/application/context/CustomerContext'
 import LibraryTabBar from '@/8th/features/library/ui/component/LibraryTabBar'
+import LibraryTabBarDnf from '@/8th/features/librarydnf/ui/component/LibraryTabBarDnf'
 import {
   useChangeListenAndRepeat,
   useChangeStudentAvatar,
@@ -24,7 +25,10 @@ import SettingRadioSelector from '@/8th/features/student/ui/component/SettingRad
 import CustomCheckbox from '@/8th/shared/ui/CustomCheckbox'
 import { BoxStyle, TextStyle } from '@/8th/shared/ui/Misc'
 import { SubPageNavHeader } from '@/8th/shared/ui/SubPageNavHeader'
-import SITE_PATH from '@/app/site-path'
+import {
+  getAccountPaths,
+  isDodonFriendsAccountPath,
+} from '@/8th/shared/utils/account-paths'
 import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
 import useTranslation from '@/localization/client/useTranslations'
 import { usePathname } from 'next/navigation'
@@ -45,6 +49,11 @@ export default function AccountSetting() {
   const { t } = useTranslation()
 
   const pathname = usePathname()
+  const accountPaths = getAccountPaths(pathname)
+  const TabBar = isDodonFriendsAccountPath(pathname)
+    ? LibraryTabBarDnf
+    : LibraryTabBar
+  const isDodonfriends = isDodonFriendsAccountPath(pathname)
 
   const { data, isLoading } = useStudent()
   const { data: avatarData, isLoading: isAvatarDataLoading } =
@@ -110,20 +119,20 @@ export default function AccountSetting() {
   const myAvatar = avatarData.avatarId || '097971'
   const myReadingUnit = data.student.studyReadingUnitId
 
-  const tabBarItems: React.ComponentProps<typeof LibraryTabBar>['items'] = []
+  const tabBarItems: React.ComponentProps<typeof TabBar>['items'] = []
   if (menu.account.setting.open) {
     tabBarItems.push({
-      href: SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING,
-      active: pathname.includes(SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING),
+      href: accountPaths.accountInfoSetting,
+      active: pathname.includes(accountPaths.accountInfoSetting),
       label: t('t8th336'),
     })
   }
   if (menu.account.studentInfo.open) {
     tabBarItems.push({
-      href: SITE_PATH.STUDENT_8TH.ACCOUNTINFO,
+      href: accountPaths.accountInfo,
       active:
-        pathname.includes(SITE_PATH.STUDENT_8TH.ACCOUNTINFO) &&
-        !pathname.includes(SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING),
+        pathname.includes(accountPaths.accountInfo) &&
+        !pathname.includes(accountPaths.accountInfoSetting),
       label: t('t8th337'),
     })
   }
@@ -132,11 +141,11 @@ export default function AccountSetting() {
     <>
       <SubPageNavHeader
         title={t('t8th335')}
-        parentPath={SITE_PATH.STUDENT_8TH.ACTIVITY}
+        parentPath={accountPaths.activity}
       />
-      {tabBarItems.length > 1 && <LibraryTabBar items={tabBarItems} />}
+      {tabBarItems.length > 1 && <TabBar items={tabBarItems} />}
       <BoxStyle>
-        {isOpenHomeScreen && (
+        {!isDodonfriends && isOpenHomeScreen && (
           <MainScreenSetting
             startScreen={startScreen}
             isOpenTodo={menu.activity.todo.open}
@@ -162,7 +171,7 @@ export default function AccountSetting() {
             isOpenLevel1={setting.listenAndRepeat.level1.open}
           />
         )}
-        {setting.quizHelper.open && (
+        {!isDodonfriends && setting.quizHelper.open && (
           <QuizHelperSetting
             hint={data.student.viewStep2Skip || false}
             isOpenHint={setting.quizHelper.hint.open}
@@ -170,7 +179,7 @@ export default function AccountSetting() {
             isOpenChance={setting.quizHelper.chance.open}
           />
         )}
-        {userConfig && (
+        {!isDodonfriends && userConfig && (
           <LevelGuidanceSetting
             levelChange={userConfig.levelGuidanceLevelChange}
             tryOtherLevel={userConfig.levelGuidanceTryOtherLevel}

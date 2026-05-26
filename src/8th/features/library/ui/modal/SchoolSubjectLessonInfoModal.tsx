@@ -4,7 +4,7 @@ import {
   ModalBodyStyle,
   ModalHeaderStyle,
 } from '@/8th/shared/styled/SharedStyled'
-import { BoxStyle } from '@/8th/shared/ui/Misc'
+import { BoxStyle, TextStyle } from '@/8th/shared/ui/Misc'
 import { ModalContainer } from '@/8th/shared/ui/Modal'
 
 export default function SchoolSubjectLessonInfoModal({
@@ -21,7 +21,7 @@ export default function SchoolSubjectLessonInfoModal({
   return (
     <ModalContainer>
       <ModalHeaderStyle>
-        <div className="title">소개</div>
+        <TextStyle>Lesson Info</TextStyle>
         <div className="btn-close" onClick={onClickClose} />
       </ModalHeaderStyle>
       <ModalBodyStyle>

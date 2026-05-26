@@ -1,6 +1,6 @@
 'use client'
 
-import LibraryTabBar from '@/8th/features/library/ui/component/LibraryTabBar'
+import LibraryTabBarDnf from '@/8th/features/librarydnf/ui/component/LibraryTabBarDnf'
 import SITE_PATH from '@/app/site-path'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -10,7 +10,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
 
   return (
     <>
-      <LibraryTabBar
+      <LibraryTabBarDnf
         items={[
           {
             href: SITE_PATH.DODON_FRIENDS.MY_LESSON,

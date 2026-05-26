@@ -24,7 +24,7 @@ export interface BookCoverProps {
   passedCount?: number
   isMovieBook?: boolean
   id: string
-  isHomework?: boolean
+  isAssignments?: boolean
   isBookInfo?: boolean
   onClickBookDetail?: () => void
   levelRoundId: string
@@ -48,7 +48,7 @@ export function BookCover({
   bookCode,
   title,
   author,
-  isHomework,
+  isAssignments,
   assignDate,
   earnPoint,
   isAssignedTodo = false,
@@ -177,7 +177,7 @@ export function BookCover({
                 <InProgress />
               </div>
             )}
-            {isHomework && (
+            {isAssignments && (
               <div className={style.home_work}>
                 <Image
                   alt=""
@@ -281,7 +281,7 @@ export function BookCover({
           )}
           {assignDate && (
             <div className={style.tag}>
-              <span>{isHomework ? `(${assignDate})` : `${assignDate}`}</span>
+              <span>{isAssignments ? `(${assignDate})` : `${assignDate}`}</span>
             </div>
           )}
         </div>

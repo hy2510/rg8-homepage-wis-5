@@ -779,6 +779,59 @@ export const DropdownContainerStyle = styled.div<DropdownContainerStyleProps>`
   gap: ${({ viewGrid }) => (viewGrid ? '1px' : '10px')};
 `
 
+export const DropdownGnbIconRowStyle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 8px;
+  padding: 10px;
+
+  .gnb-menu-item {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 58px;
+    padding: 4px 6px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+
+    &:hover {
+      background-color: var(--color-light-blue-opacity-10);
+    }
+  }
+
+  .gnb-menu-item-text {
+    width: 100%;
+    max-width: 60px;
+    font-size: 0.6em;
+    text-align: center;
+    color: var(--font-color-secondary);
+  }
+
+  .item-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      display: block;
+    }
+  }
+
+  .current {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+`
+
 export const DropdownItemStyle = styled.div<{
   viewGrid: boolean
 }>`
@@ -870,6 +923,10 @@ export const DropdownButtonSmallStyle = styled.div`
     &.large-text {
       font-size: 18px;
       color: var(--font-color-primary);
+    }
+
+    &.medium-text {
+      font-size: 16px;
     }
   }
 
@@ -1809,6 +1866,10 @@ export const ModalHeaderStyle = styled.div`
     font-weight: 800;
     color: var(--font-color-primary);
     min-width: 120px;
+
+    &.calendar-title {
+      text-align: center;
+    }
   }
 
   .btn-close {
@@ -1834,6 +1895,13 @@ export const ModalBodyStyle = styled.div<{
   overflow-y: auto;
   overflow-x: hidden;
   max-height: calc(100vh - 133px);
+
+  ${({ calendarBody }) =>
+    phone(`
+    max-height: calc(100vh - ${calendarBody ? 130 : 81}px);
+    padding-bottom: 20px;
+  `)}
+
   ${({ viewCloud }) =>
     viewCloud &&
     `
@@ -2484,10 +2552,9 @@ export const SelectBoxStyle = styled.div<{
   select {
     padding: 0;
     border: none;
-    background-color: var(--color-white);
     font-size: ${({ largeFont, smallFont }) =>
       largeFont ? '18px' : smallFont ? '14px' : '16px'};
-    font-family: var(--font-family-secondary);
+    font-family: var(--font-family-rg-b);
     font-weight: ${({ largeFont }) => (largeFont ? '800' : '700')};
     color: var(--font-color-primary);
     cursor: pointer;

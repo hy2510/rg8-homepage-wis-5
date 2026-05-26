@@ -290,7 +290,7 @@ export default function Page() {
                     title={book.title}
                     author={book.author}
                     isInprogressTodo={isInprogressTodo}
-                    isHomework={book.homeworkYn}
+                    isAssignments={book.assignmentsYn}
                     isBookInfo={bookInfo === book.studyId}
                     isMovieBook={!!book.animationPath}
                     onClickBookDetail={() => {

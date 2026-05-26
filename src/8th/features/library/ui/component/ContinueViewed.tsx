@@ -3,6 +3,7 @@
 import { useIsPhone } from '@/8th/application/context/ScreenModeContext'
 import { Assets } from '@/8th/assets/asset-library'
 import { TodoBook } from '@/8th/features/todo/model/todo-book'
+import { getTodoBookDisplayDate } from '@/8th/features/todo/utils/todo-book-date'
 import {
   BookListEmptyStateStyle,
   BookListStyle,
@@ -288,7 +289,8 @@ function renderBookItem(
       point={book.getableRgPoint}
       src={book.surfaceImagePath}
       levelName={book.levelName}
-      homeworkYn={book.homeworkYn}
+      displayDate={getTodoBookDisplayDate(book)}
+      assignmentsYn={book.assignmentsYn}
       recommendedAge={book.recommendedAge}
       isCheckable={false}
       isDisabled={false}

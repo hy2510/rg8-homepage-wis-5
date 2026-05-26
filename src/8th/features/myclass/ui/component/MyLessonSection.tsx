@@ -45,7 +45,7 @@ export default function MyLessonSection({
     isActive && _progressColor ? _progressColor : 'var(--color-gray-strong)'
 
   return (
-    <DailyRGCourseContainerStyle ref={ref}>
+    <DailyRGCourseContainerStyle ref={ref} isDodoFriends={true}>
       <DailyRGCourseStyle
         bgColor={isCompleted ? '#FFCA2B' : bgColor}
         isCurrent={isActive}

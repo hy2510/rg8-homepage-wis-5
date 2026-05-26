@@ -33,9 +33,10 @@ import {
 import Pagenation from '@/8th/shared/ui/Pagenation'
 import { SubPageNavHeader } from '@/8th/shared/ui/SubPageNavHeader'
 import { openDownloadLink, openWindow } from '@/8th/shared/utils/open-window'
-import SITE_PATH from '@/app/site-path'
+import { getLibraryPaths } from '@/8th/shared/utils/library-paths'
 import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
 import useTranslation from '@/localization/client/useTranslations'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function FavoriteBookList() {
@@ -47,6 +48,9 @@ function LibraryBookListDependency() {
   const { t } = useTranslation()
 
   const student = useStudent()
+  const pathname = usePathname()
+  const libraryPaths = getLibraryPaths(pathname)
+  const parentPath = libraryPaths.library
 
   if (student.isLoading) {
     return <></>
@@ -60,7 +64,7 @@ function LibraryBookListDependency() {
       <SubPageNavHeader
         title={`${t('t8th030')}`}
         iconSrc={Assets.Icon.Side.favorite.src}
-        parentPath={SITE_PATH.STUDENT_8TH.LIBRARY}
+        parentPath={parentPath}
       />
       <BookList />
     </>

@@ -3,9 +3,10 @@
 import { useCustomerConfiguration } from '@/8th/application/context/CustomerContext'
 import { useIsTabletLarge } from '@/8th/application/context/ScreenModeContext'
 import { Assets } from '@/8th/assets/asset-library'
-import CalendarModal from '@/8th/features/achieve/ui/modal/CalendarModal'
+import DodonFriendsCalendarModal from '@/8th/features/achieve/ui/modal/CalendarModalDnf'
 import LevelTestInfoModal from '@/8th/features/student/ui/modal/LevelTestInfoModal'
 import DropdownMenu from '@/8th/shared/ui/Dropdowns'
+import { getAccountPaths } from '@/8th/shared/utils/account-paths'
 import SITE_PATH from '@/app/site-path'
 import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
 import useTranslation from '@/localization/client/useTranslations'
@@ -47,10 +48,43 @@ export default function GlobalNavBarDnf() {
   const [isShowAppUserGuideModal, setShowAppUserGuideModal] = useState(false)
 
   const pathname = usePathname()
+  const accountPaths = getAccountPaths(pathname)
 
   const router = useRouter()
 
-  const dropdownItems: { text: string; onClick: () => void }[] = []
+  const dropdownItems: {
+    text: string
+    icon?: StaticImageData
+    onClick: () => void
+  }[] = []
+  if (isGnbBottom && menu.dubbing.open) {
+    dropdownItems.push({
+      text: 'DUBBING',
+      icon: Assets.Icon.Gnb.dubbing,
+      onClick: () => {
+        maketingEventTracker.eventAction('GNB 탭 클릭', {
+          version: '8th',
+          tab_name: 'Dubbing',
+        })
+        router.push(SITE_PATH.DODON_FRIENDS.DUBBING)
+      },
+    })
+  }
+
+  if (isGnbBottom && menu.movies.open) {
+    dropdownItems.push({
+      text: 'MOVIES',
+      icon: Assets.Icon.Gnb.movies,
+      onClick: () => {
+        maketingEventTracker.eventAction('GNB 탭 클릭', {
+          version: '8th',
+          tab_name: 'Movies',
+        })
+        router.push(SITE_PATH.DODON_FRIENDS.MOVIES)
+      },
+    })
+  }
+
   if (menu.levelTest.open) {
     dropdownItems.push({
       text: 'Level Test',
@@ -66,7 +100,7 @@ export default function GlobalNavBarDnf() {
           version: '8th',
           tab_name: 'Try Again',
         })
-        router.push(SITE_PATH.STUDENT_8TH.TRYAGAIN)
+        router.push(SITE_PATH.DODON_FRIENDS.TRYAGAIN)
       },
     })
   }
@@ -74,39 +108,12 @@ export default function GlobalNavBarDnf() {
     dropdownItems.push({
       text: 'Setting',
       onClick: () => {
+        setIsDropdownOpen(false)
         maketingEventTracker.eventAction('GNB 탭 클릭', {
           version: '8th',
           tab_name: 'Setting',
         })
-        router.push(SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING)
-      },
-    })
-  }
-  if (menu.eb.collections.workbooks.open) {
-    dropdownItems.push({
-      text: 'Workbook Units',
-      onClick: () => {
-        maketingEventTracker.eventAction('GNB 탭 클릭', {
-          version: '8th',
-          tab_name: 'Workbook Units',
-        })
-        router.push(`${SITE_PATH.STUDENT_8TH.EB_WORKBOOK}/ka`)
-      },
-    })
-  }
-  if (menu.dodoAbcWorkbookMp3.open && menu.eb.readingLevel.level.dodoAbc.open) {
-    dropdownItems.push({
-      text: 'PK Workbook MP3',
-      onClick: () => {
-        maketingEventTracker.eventAction('GNB 탭 클릭', {
-          version: '8th',
-          tab_name: 'PK Workbook MP3',
-        })
-        openWindow(MP3_URL.dodo, {
-          external: true,
-          target: '_blank',
-          feature: 'noopener, noreferrer',
-        })
+        router.push(accountPaths.accountInfoSetting)
       },
     })
   }
@@ -126,26 +133,26 @@ export default function GlobalNavBarDnf() {
       },
     })
   }
-  if (menu.rank.open) {
-    dropdownItems.push({
-      text: t('t8th229'),
-      onClick: () => router.push(SITE_PATH.STUDENT_8TH.RANKING),
-    })
-  }
+  // if (menu.rank.open) {
+  //   dropdownItems.push({
+  //     text: t('t8th229'),
+  //     onClick: () => router.push(SITE_PATH.STUDENT_8TH.RANKING),
+  //   })
+  // }
 
   // 이용 가이드 보기 안내 메뉴 추가
-  if (true) {
-    dropdownItems.push({
-      text: t('t8th317'),
-      onClick: () => {
-        maketingEventTracker.eventAction('GNB 탭 클릭', {
-          version: '8th',
-          tab_name: 'App User Guide',
-        })
-        setShowAppUserGuideModal(true)
-      },
-    })
-  }
+  // if (true) {
+  //   dropdownItems.push({
+  //     text: t('t8th317'),
+  //     onClick: () => {
+  //       maketingEventTracker.eventAction('GNB 탭 클릭', {
+  //         version: '8th',
+  //         tab_name: 'App User Guide',
+  //       })
+  //       setShowAppUserGuideModal(true)
+  //     },
+  //   })
+  // }
 
   if (isGnbBottom) {
     // 더빙룸 메뉴 제거
@@ -186,8 +193,8 @@ export default function GlobalNavBarDnf() {
           <MenuItem
             icon={Assets.Icon.Gnb.library}
             text="LIBRARY"
-            isActive={pathname.includes(SITE_PATH.STUDENT_8TH.LIBRARY)}
-            linkUrl={SITE_PATH.STUDENT_8TH.LIBRARY}
+            isActive={pathname.includes(SITE_PATH.DODON_FRIENDS.LIBRARY)}
+            linkUrl={SITE_PATH.DODON_FRIENDS.LIBRARY}
           />
         )}
 
@@ -209,27 +216,33 @@ export default function GlobalNavBarDnf() {
           />
         )} */}
 
-        <MenuItem
-          icon={Assets.Icon.Gnb.movies}
-          text="MOVIES"
-          isActive={pathname.includes(SITE_PATH.STUDENT_8TH.ACTIVITY)}
-          linkUrl={SITE_PATH.STUDENT_8TH.ACTIVITY}
-        />
-
         {menu.activity.open && (
           <MenuItem
             icon={Assets.Icon.Gnb.myActivity}
             text="MY PAGE"
-            isActive={pathname.includes(SITE_PATH.STUDENT_8TH.ACTIVITY)}
-            linkUrl={SITE_PATH.STUDENT_8TH.ACTIVITY}
+            isActive={pathname.includes(SITE_PATH.DODON_FRIENDS.ACTIVITY)}
+            linkUrl={SITE_PATH.DODON_FRIENDS.ACTIVITY}
           />
         )}
 
         {menu.calendar.open && (
           <DisplayNoneStyle $hideOnLabtopS>
             <div className="divider" />
+
             <Gap size={10} />
-            <MenuItem icon={Assets.Icon.Gnb.dubbing} text="DUBBING" />
+            <MenuItem
+              icon={Assets.Icon.Gnb.dubbing}
+              text="DUBBING"
+              isActive={pathname.includes(SITE_PATH.DODON_FRIENDS.DUBBING)}
+              linkUrl={SITE_PATH.DODON_FRIENDS.DUBBING}
+            />
+            <Gap size={10} />
+            <MenuItem
+              icon={Assets.Icon.Gnb.movies}
+              text="MOVIES"
+              isActive={pathname.includes(SITE_PATH.DODON_FRIENDS.MOVIES)}
+              linkUrl={SITE_PATH.DODON_FRIENDS.MOVIES}
+            />
             <Gap size={10} />
             <div className="divider" />
             <Gap size={10} />
@@ -259,7 +272,9 @@ export default function GlobalNavBarDnf() {
         )}
       </div>
       {isCalendarOpen && (
-        <CalendarModal onCloseModal={() => setCalendarOpen(false)} />
+        <DodonFriendsCalendarModal
+          onCloseModal={() => setCalendarOpen(false)}
+        />
       )}
       {isLevelTestOpen && (
         <LevelTestInfoModal onClose={() => setLevelTestOpen(false)} />
@@ -280,7 +295,11 @@ interface MenuItemProps {
   isDropdown?: boolean
   onDropdownToggle?: () => void
   isOpen?: boolean
-  dropdownItems?: { text: string; onClick: () => void }[]
+  dropdownItems?: {
+    text: string
+    icon?: StaticImageData
+    onClick: () => void
+  }[]
   linkUrl?: string
   onClick?: () => void
 }

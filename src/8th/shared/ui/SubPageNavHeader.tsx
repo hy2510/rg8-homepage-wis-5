@@ -10,6 +10,7 @@ interface SubPageNavHeaderProps {
   iconSrc?: string
   parentPath?: string
   onOverrideBack?: () => void
+  titleFontFamily?: 'round' | 'sans' | 'rg-b'
 }
 
 export function SubPageNavHeader({
@@ -17,6 +18,7 @@ export function SubPageNavHeader({
   subTitle,
   iconSrc,
   parentPath,
+  titleFontFamily = 'round',
   onOverrideBack,
 }: SubPageNavHeaderProps) {
   const router = useRouter()
@@ -53,7 +55,26 @@ export function SubPageNavHeader({
       )}
       {iconSrc && <Image src={iconSrc} alt="simbol" width={30} height={30} />}
       {title && (
-        <TextStyle fontSize="var(--font-size-large)">{title}</TextStyle>
+        <TextStyle
+          fontSize={
+            titleFontFamily === 'rg-b' || titleFontFamily === 'sans'
+              ? 'var(--font-size-xlarge)'
+              : 'var(--font-size-large)'
+          }
+          fontWeight={
+            titleFontFamily === 'rg-b' || titleFontFamily === 'sans'
+              ? 'bold'
+              : 'normal'
+          }
+          fontFamily={
+            titleFontFamily === 'rg-b'
+              ? 'rg-b'
+              : titleFontFamily === 'sans'
+                ? 'sans'
+                : 'round'
+          }>
+          {title}
+        </TextStyle>
       )}
       {subTitle && (
         <TextStyle fontSize="var(--font-size-large)" fontColor="secondary">

@@ -46,8 +46,9 @@ import useTranslation from '@/localization/client/useTranslations'
 import DateUtils from '@/util/date-utils'
 import NumberUtils from '@/util/number-utils'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { getActivityPaths } from '@/8th/shared/utils/activity-paths'
 
 export default function StudyResultHistory({
   startDate,
@@ -72,22 +73,24 @@ export default function StudyResultHistory({
   const { t } = useTranslation()
 
   const router = useRouter()
+  const pathname = usePathname()
+  const activityPaths = getActivityPaths(pathname)
 
   const onChangeDate = (startDate: string, endDate: string) => {
     router.replace(
-      `${SITE_PATH.STUDENT_8TH.REVIEW}?startDate=${startDate}&endDate=${endDate}`,
+      `${activityPaths.review}?startDate=${startDate}&endDate=${endDate}`,
     )
   }
 
   const onChangeKeyword = (keyword: string) => {
-    router.replace(`${SITE_PATH.STUDENT_8TH.REVIEW}?keyword=${keyword}`)
+    router.replace(`${activityPaths.review}?keyword=${keyword}`)
   }
 
   return (
     <>
       <SubPageNavHeader
         title={`${t('t8th047')}`}
-        parentPath={SITE_PATH.STUDENT_8TH.ACTIVITY}
+        parentPath={activityPaths.activity}
       />
       <StudyResultHistoryList
         startDate={startDate}
@@ -125,6 +128,8 @@ function StudyResultHistoryList({
   const { t } = useTranslation()
 
   const router = useRouter()
+  const pathname = usePathname()
+  const activityPaths = getActivityPaths(pathname)
 
   const [exportMode, setExportMode] =
     useState<StudyHistoryBookExportType>('none')
@@ -326,11 +331,11 @@ function StudyResultHistoryList({
     if (item.key === 'HistoryTypeReading') {
     } else if (item.key === 'HistoryTypeWriting') {
       router.replace(
-        `${SITE_PATH.STUDENT_8TH.REVIEW_WRITE}?startDate=${pStartDate}&endDate=${pEndDate}`,
+        `${activityPaths.reviewWrite}?startDate=${pStartDate}&endDate=${pEndDate}`,
       )
     } else if (item.key === 'HistoryTypeSpeaking') {
       router.replace(
-        `${SITE_PATH.STUDENT_8TH.REVIEW_SPEAK}?startDate=${pStartDate}&endDate=${pEndDate}`,
+        `${activityPaths.reviewSpeak}?startDate=${pStartDate}&endDate=${pEndDate}`,
       )
     }
   }
@@ -570,15 +575,6 @@ function StudyResultHistoryList({
 
   return (
     <>
-      <BoxStyle
-        padding="10px 15px"
-        backgroundColor="rgba(212, 220, 230, 0.50)"
-        borderRadius={10}>
-        <TextStyle fontSize="small" fontFamily="sans" fontColor="primary">
-          {t('t8th051', { num: 50 })}
-        </TextStyle>
-      </BoxStyle>
-
       <ReviewListStyle>
         <ReviewActionBar
           key={`actionbar_${startDate}_${endDate}_${keyword}`}

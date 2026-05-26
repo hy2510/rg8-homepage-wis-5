@@ -1,6 +1,7 @@
 'use client'
 
 import { Assets } from '@/8th/assets/asset-library'
+import CalendarModalDnf from '@/8th/features/achieve/ui/modal/CalendarModalDnf'
 import {
   MY_LESSON_GROUPS,
   MY_LESSON_TODAY_SECTION,
@@ -10,7 +11,7 @@ import {
   MyLessonStyle,
   QuickJumpButtonStyle,
 } from '@/8th/shared/styled/FeaturesStyled'
-import { Divide, Gap } from '@/8th/shared/ui/Misc'
+import { BoxStyle, Gap, TextStyle } from '@/8th/shared/ui/Misc'
 import SITE_PATH from '@/app/site-path'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -26,6 +27,8 @@ import MyLessonBookItem from '../component/MyLessonBookItem'
 import MyLessonHeader from '../component/MyLessonHeader'
 import MyLessonSection from '../component/MyLessonSection'
 
+const SCROLL_FOCUS_OFFSET_BELOW_CENTER = 30
+
 export default function MyLessonHome() {
   const router = useRouter()
   const focusTargetRef = useRef<HTMLDivElement>(null)
@@ -34,6 +37,7 @@ export default function MyLessonHome() {
   const [jumpButtonState, setJumpButtonState] = useState<
     'up' | 'down' | undefined
   >('down')
+  const [isCalendarModalOpen, setCalendarModalOpen] = useState(false)
 
   const isDataReady = true
 
@@ -70,7 +74,10 @@ export default function MyLessonHome() {
 
     const targetElementCenter = targetElementTop + boxHeight / 2
 
-    const moveYCenter = targetElementCenter - window.innerHeight / 2
+    const moveYCenter =
+      targetElementCenter -
+      window.innerHeight / 2 -
+      SCROLL_FOCUS_OFFSET_BELOW_CENTER
 
     return {
       itemHeight: boxHeight,
@@ -185,7 +192,9 @@ export default function MyLessonHome() {
   return (
     <>
       <MyLessonStyle>
-        <MyLessonHeader />
+        <MyLessonHeader
+          onCalendarButtonClick={() => setCalendarModalOpen(true)}
+        />
 
         <MyLessonSection
           title={MY_LESSON_TODAY_SECTION.title}
@@ -204,11 +213,19 @@ export default function MyLessonHome() {
         {MY_LESSON_GROUPS.map((group) => (
           <>
             <Gap size={15} />
-            <Divide
-              title={
-                group.classes ? `${group.classes} ${group.title}` : group.title
-              }
-            />
+            <BoxStyle
+              display="flex"
+              flexDirection="row"
+              gap={5}
+              alignItems="center"
+              padding="5px 2px">
+              <TextStyle fontColor="secondary">•</TextStyle>
+              <TextStyle fontSize="large">
+                {group.classes
+                  ? `${group.classes} ${group.title}`
+                  : group.title}
+              </TextStyle>
+            </BoxStyle>
             <div>
               {group.lessons.map((lesson) => (
                 <MyLessonBookItem
@@ -289,6 +306,9 @@ export default function MyLessonHome() {
             />
           )}
         </QuickJumpButtonStyle>
+      )}
+      {isCalendarModalOpen && (
+        <CalendarModalDnf onCloseModal={() => setCalendarModalOpen(false)} />
       )}
     </>
   )

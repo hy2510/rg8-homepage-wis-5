@@ -22,11 +22,11 @@ export default function ClassesListLessonBookTile({ book }: Props) {
 
   const unitCheckSrc = unitComplete
     ? Assets.Icon.Study.lessonCheckWhite
-    : Assets.Icon.Study.lessonCheckYellow
+    : Assets.Icon.Study.lessonCheckGray
 
   const unitReviewCheckSrc = unitReviewComplete
     ? Assets.Icon.Study.lessonCheckWhite
-    : Assets.Icon.Study.lessonCheckRed
+    : Assets.Icon.Study.lessonCheckGray
 
   return (
     <div className="cl-book-tile">

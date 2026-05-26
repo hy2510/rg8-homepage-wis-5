@@ -1260,6 +1260,12 @@ export const ClassCardStyle = styled.div<{
   padding: 20px 30px;
   border-radius: 20px;
 
+  ${phone(`
+    min-height: 120px;
+    padding: 15px;
+    gap: 15px;
+  `)}
+
   &::before {
     content: '';
     position: absolute;
@@ -1268,7 +1274,7 @@ export const ClassCardStyle = styled.div<{
     width: 100%;
     height: 100%;
     background-image: url(${Assets.Image.GlossyBgSmall.src});
-    background-size: 50% 100%;
+    background-size: auto 100%;
     background-position: top 0 right 50px;
     background-repeat: no-repeat;
     z-index: 0;
@@ -1310,6 +1316,7 @@ export const ClassCardStyle = styled.div<{
       justify-content: center;
       gap: 5px;
       min-width: 0;
+      padding: 5px 0;
 
       .title {
         font-size: var(--font-size-large);
@@ -1340,6 +1347,10 @@ export const ClassCardStyle = styled.div<{
     flex-shrink: 0;
     width: 135px;
     height: 100%;
+
+    ${phone(`
+      display: none;
+    `)}
 
     .book-stack {
       width: 100%;
@@ -1720,6 +1731,7 @@ export const ClassesListStyle = styled.div`
 
   .cl-book-actions {
     display: flex;
+    gap: 2px;
     width: 100%;
     height: 26px;
     border-radius: 100px;
@@ -2379,6 +2391,44 @@ export const CalendarGridStyle = styled.div`
   }
 `
 
+export const CalendarGridDnfStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  .calendar-week-header {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 5px;
+    background-color: #fff;
+    border-top: 0.5px solid var(--line-color-primary);
+    border-bottom: 0.5px solid var(--line-color-primary);
+    padding: 5px;
+  }
+
+  .current-daily-goal {
+    font-size: var(--font-size-medium);
+    font-family: var(--font-family-secondary);
+    font-weight: 600;
+    padding: 15px 25px;
+    border-bottom: 1px solid var(--line-color-primary);
+
+    ${phone(`
+      padding: 10px 20px;
+    `)}
+
+    .text-gray {
+      font-family: var(--font-family-secondary);
+      font-weight: 600;
+      color: var(--font-color-secondary);
+    }
+  }
+`
+
 export const CalendarWeekdayStyle = styled.span<{
   variant: 'sun' | 'sat' | 'weekday'
 }>`
@@ -2397,6 +2447,7 @@ export const CalendarWeekdayStyle = styled.span<{
 `
 export const CalendarHeaderStyle = styled.div`
   width: 100%;
+  min-height: 70px;
   padding: 15px 20px;
   border-bottom: 1px solid var(--line-color-primary);
   display: flex;
@@ -2503,6 +2554,9 @@ export const CalendarHeaderStyle = styled.div`
       &.yellow {
         background-color: #ffcb2c;
       }
+      &.green {
+        background-color: #2cb1be;
+      }
     }
   }
 `
@@ -2551,6 +2605,152 @@ export const CalendarItemStyle = styled.div`
 
   .content {
     cursor: pointer;
+  }
+
+  .books-read,
+  .points {
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-secondary);
+    color: var(--font-color-secondary);
+    text-align: center;
+
+    .point-unit {
+      font-size: var(--font-size-small);
+      font-family: var(--font-family-secondary);
+      color: var(--font-color-secondary);
+    }
+  }
+
+  .books-read.active {
+    color: var(--font-color-light-blue);
+    font-weight: 700;
+  }
+
+  .points.active {
+    color: var(--font-color-light-blue);
+    font-weight: 700;
+  }
+
+  .badge-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .daily-goal-achievement-line {
+    width: calc(100% + 1px);
+    height: 2px;
+    background-color: var(--line-color-light-blue);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+  }
+
+  .attendance-line {
+    width: calc(100% + 1px);
+    height: 2px;
+    background-color: #ffcb2c;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+  }
+`
+
+export const CalendarItemDnfStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 70px;
+  gap: 2px;
+  background-color: #fff;
+  background-image: url(${Assets.Icon.glossyPoint.src});
+  background-size: 10px 10px;
+  background-position: top 4px left 4px;
+  background-repeat: no-repeat;
+  padding: 2px 0;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+
+  &.assigned-bg {
+    background-color: #eaf7f8;
+  }
+
+  &.completed-bg {
+    background-color: #ffc62f;
+  }
+
+  .day-number {
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    font-family: var(--font-family-secondary);
+    color: rgb(44, 177, 190, 0.5);
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    &.assigned {
+      color: rgb(44, 177, 190, 0.5);
+    }
+
+    &.completed {
+      color: #fff;
+    }
+
+    &.today {
+      color: #fff;
+      background-color: var(--color-red-medium);
+    }
+
+    &.other-month {
+      color: var(--font-color-secondary);
+
+      &.today {
+        color: #fff;
+      }
+    }
+  }
+
+  .content {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    .lesson-title {
+      font-size: var(--font-size-small);
+      font-family: var(--font-family-rg-b);
+      font-weight: 600;
+      color: #2cb1be;
+
+      &.completed {
+        color: #fff;
+      }
+    }
+
+    .lesson-progress {
+      font-size: var(--font-size-small);
+      font-family: var(--font-family-rg-b);
+      font-weight: 600;
+      color: #2cb1be;
+      opacity: 0.5;
+
+      &.completed {
+        color: #fff;
+        opacity: 0.75;
+      }
+    }
   }
 
   .books-read,
@@ -2996,16 +3196,19 @@ export const DailyRGBookItemStyle = styled.div<{
   }
 `
 
-export const DailyRGCourseContainerStyle = styled.div`
+export const DailyRGCourseContainerStyle = styled.div<{
+  isDodoFriends?: boolean
+}>`
   padding-top: 20px;
   position: sticky;
-  top: 60px;
+  top: ${({ isDodoFriends }) => (isDodoFriends ? '52px' : '60px')};
   z-index: 800;
   background-color: #fff;
 
-  ${labtopS(`
-    top: 120px;
-  `)}
+  ${({ isDodoFriends }) =>
+    labtopS(`
+      top: ${isDodoFriends ? '112px' : '120px'};
+    `)}
 
   &::before {
     content: '';
@@ -3765,7 +3968,7 @@ export const BookItemStyle = styled.div<{ level: string }>`
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    margin-top: 10px;
+    margin-top: 0;
 
     ${phone(`
       margin-top: 5px;
@@ -3778,6 +3981,7 @@ export const BookItemStyle = styled.div<{ level: string }>`
       width: 100%;
       min-width: 0;
       min-height: 60px;
+      margin-top: 10px;
 
       ${phone(`
         min-height: 55px;
@@ -3844,6 +4048,27 @@ export const BookItemStyle = styled.div<{ level: string }>`
         height: 5px;
       }
     }
+  }
+
+  > .date + .book-info-container .wrapper {
+    margin-top: 0;
+  }
+
+  > .date {
+    width: 100%;
+    text-align: left;
+    padding-left: 5px;
+    padding-top: 0;
+    margin-top: 10px;
+    font-family: var(--font-family-rg-b);
+    font-size: 0.7em;
+    font-weight: 500;
+    color: var(--font-color-secondary);
+    line-height: 1.2;
+
+    ${phone(`
+      font-size: 0.65em;
+    `)}
   }
 
   @keyframes loading {
@@ -4626,15 +4851,29 @@ export const SearchBarStyle = styled.div`
   }
 `
 
-export const LibraryFinderTabBarStyle = styled.div`
+export const LibraryFinderTabBarStyle = styled.div<{ tabLine?: 'none' }>`
   width: 100%;
+  min-width: 0;
 
   .tabs {
     display: flex;
     align-items: flex-end;
+    flex-wrap: nowrap;
     gap: 10px;
     position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    ${({ tabLine }) =>
+      tabLine !== 'none' &&
+      `
     &::after {
       content: '';
       position: absolute;
@@ -4644,14 +4883,17 @@ export const LibraryFinderTabBarStyle = styled.div`
       width: 100%;
       height: 1px;
       background: var(--line-color-primary);
-    }
+    }`}
   }
 
   .tab {
+    flex-shrink: 0;
+    white-space: nowrap;
     font-family: var(--font-family-secondary);
     font-weight: 700;
     font-size: var(--font-size-large);
-    padding: 15px 30px;
+    padding: ${({ tabLine }) =>
+      tabLine === 'none' ? '20px 10px' : '15px 30px'};
     border-radius: 15px 15px 0 0;
     text-decoration: none;
     cursor: pointer;
@@ -4667,7 +4909,8 @@ export const LibraryFinderTabBarStyle = styled.div`
     &.active {
       color: #00b4d8;
       background: #fff;
-      border: 1px solid var(--line-color-primary);
+      border: ${({ tabLine }) =>
+        tabLine === 'none' ? 'none' : '1px solid var(--line-color-primary)'};
       border-bottom: 1px solid #fff;
     }
   }
@@ -5850,10 +6093,12 @@ export const MyLessonHeaderStyle = styled.div`
   align-items: center;
   position: sticky;
   top: 5px;
-  z-index: 10;
+  z-index: 100;
+  background-color: #fff;
 
-  ${phone(`
-    top: 60px;
+  ${labtopS(`
+    top: 70px;
+    z-index: 899;
   `)}
 
   &::before {
@@ -5865,10 +6110,15 @@ export const MyLessonHeaderStyle = styled.div`
     bottom: -5px;
     z-index: -1;
     background-color: #fff;
+
+    ${labtopS(`
+      left: -10px;
+      right: -10px;
+    `)}
   }
 
   .calendar-button {
-    /* cursor: pointer; */
+    cursor: pointer;
     width: fit-content;
     display: flex;
     align-items: center;
@@ -5886,5 +6136,641 @@ export const MyLessonHeaderStyle = styled.div`
       align-items: center;
       gap: 5px;
     }
+  }
+`
+
+// features > movies > movie categories
+
+export const MovieCategoriesStyle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .movie-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .movie-section-title {
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+    height: fit-content;
+    font-size: var(--font-size-large);
+    font-weight: 500;
+    color: var(--font-color-primary);
+    font-family: var(--font-family-primary);
+  }
+
+  .movie-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px 10px;
+
+    ${phone(`
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px 10px;
+    `)}
+  }
+
+  .movie-card {
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.36;
+    overflow: hidden;
+    border: 0;
+    border-radius: 25px;
+    padding: 0;
+    background: var(--color-gray-light);
+    box-shadow: none;
+    isolation: isolate;
+  }
+
+  .movie-card-image {
+    z-index: 2;
+    object-fit: cover;
+    object-position: center;
+  }
+`
+
+export const MoviesCategoriesHeaderStyle = styled.div`
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 170px;
+  padding: 20px 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-radius: 20px;
+  border: 1px solid #dff0ff;
+  overflow: hidden;
+
+  ${phone(`
+    min-height: 140px;
+    padding: 15px 25px;
+  `)}
+
+  .dubbing-categories-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .dubbing-categories-header-title {
+    margin: 0;
+    font-size: var(--font-size-xxlarge);
+    font-weight: 700;
+    color: #ffc62f;
+    font-family: var(--font-family-rg-b);
+
+    ${phone(`
+      font-size: var(--font-size-xlarge);
+    `)}
+  }
+
+  .dubbing-categories-header-subtitle {
+    margin: 0;
+    font-size: var(--font-size-large);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--font-family-rg-b);
+    line-height: 1.4;
+
+    ${phone(`
+      font-size: var(--font-size-medium);
+    `)}
+  }
+
+  .dubbing-categories-header-image {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+
+    ${phone(`
+      margin-left: auto;
+    `)}
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: 140px;
+      max-height: 130px;
+      object-fit: contain;
+
+      ${phone(`
+        max-width: 100px;
+        max-height: 100px;
+      `)}
+    }
+  }
+  background-image:
+    url(${Assets.Icon.glossyPoint.src}),
+    linear-gradient(93deg, #3c4b62 0%, #000 100%);
+  background-size:
+    12px,
+    100% 100%;
+  background-position:
+    top 8px left 8px,
+    center;
+  background-repeat: no-repeat, no-repeat;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-image: url(${Assets.Image.GlossyBgBigWhite25.src});
+    background-size: auto 100%;
+    background-position: top 0 left 0;
+    background-repeat: no-repeat;
+    animation: var(--animation-glass-complete);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+`
+
+// features > movies > movie contents list
+
+export const MovieContentsListStyle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .movie-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 10px;
+
+    ${phone(`
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 16px 12px;
+    `)}
+  }
+
+  .movie-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .movie-card-thumbnail {
+    position: relative;
+    width: 100%;
+    background: var(--color-gray-medium);
+    border-radius: 20px;
+    overflow: visible;
+
+    > img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+    }
+
+    .badges {
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 3px;
+      pointer-events: none;
+
+      img {
+        width: auto;
+        height: 30px;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .movie-card-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .movie-card-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 5px;
+
+    .movie-card-status-label-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      .movie-card-check-icon {
+        display: block;
+        width: 20px;
+        height: 20px;
+        filter: grayscale(1);
+        opacity: 0.5;
+
+        &.completed {
+          filter: grayscale(0);
+          opacity: 1;
+        }
+      }
+    }
+
+    .movie-card-status-label,
+    .movie-card-status-date {
+      font-family: var(--font-family-rg-b);
+      font-size: var(--font-size-small);
+      font-weight: 700;
+      padding-top: 2px;
+    }
+
+    .movie-card-status-date {
+      color: var(--font-color-secondary);
+    }
+  }
+`
+
+export const MovieVideoModalStyle = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .movie-video-modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .movie-video-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #000;
+  }
+`
+
+export const MovieContentsListHeaderStyle = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 20px;
+  align-items: center;
+
+  ${phone(`
+    grid-template-columns: 120px 1fr;
+    align-items: flex-start;
+    gap: 15px;
+  `)}
+
+  .movie-contents-list-header-left {
+    width: 100%;
+    height: fit-content;
+    min-height: 110px;
+    border-radius: 20px;
+    overflow: hidden;
+
+    ${phone(`
+      min-height: 80px;
+      border-radius: 15px;
+    `)}
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--color-gray-light);
+    }
+  }
+
+  .movie-contents-list-header-right {
+    width: 100%;
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .movie-contents-list-header-right-title {
+      font-size: var(--font-size-xlarge);
+      font-weight: 700;
+      color: var(--font-color-primary);
+      font-family: var(--font-family-rg-b);
+
+      ${phone(`
+        font-size: var(--font-size-large);
+      `)}
+    }
+
+    .movie-contents-list-header-right-subtitle {
+      font-size: var(--font-size-large);
+      font-weight: 500;
+      color: var(--font-color-secondary);
+      font-family: var(--font-family-rg-b);
+      line-height: 1.15;
+
+      ${phone(`
+        font-size: var(--font-size-medium);
+      `)}
+    }
+  }
+`
+
+// features > dubbing > dubbing categories
+
+export const DubbingCategoriesStyle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .dubbing-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 28px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #dce3ec 0%, #c8d2de 100%);
+    margin-bottom: 20px;
+
+    ${phone(`
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    `)}
+  }
+
+  .dubbing-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .dubbing-banner-title {
+    margin: 0;
+    font-size: var(--font-size-xlarge);
+    font-weight: 700;
+    color: var(--font-color-primary);
+    font-family: var(--font-family-primary);
+  }
+
+  .dubbing-banner-subtitle {
+    margin: 0;
+    font-size: var(--font-size-medium);
+    font-weight: 500;
+    color: var(--font-color-secondary);
+    font-family: var(--font-family-primary);
+    line-height: 1.4;
+  }
+
+  .dubbing-banner-image {
+    flex-shrink: 0;
+    width: 120px;
+    height: 90px;
+    border-radius: 12px;
+    background: var(--color-gray-medium);
+
+    ${phone(`
+      width: 100%;
+      max-width: 200px;
+      height: 80px;
+    `)}
+  }
+
+  .dubbing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 10px;
+
+    ${tabletS(`
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    `)}
+
+    ${phone(`
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 16px 12px;
+    `)}
+  }
+
+  .dubbing-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dubbing-card-thumbnail {
+    position: relative;
+    width: 100%;
+    background: var(--color-gray-medium);
+    border-radius: 20px;
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .dubbing-card-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0 5px;
+  }
+
+  .dubbing-card-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 5px;
+
+    .dubbing-card-status-label-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      .dubbing-card-check-icon {
+        display: block;
+        width: 20px;
+        height: 20px;
+        filter: grayscale(1);
+        opacity: 0.5;
+
+        &.completed {
+          filter: grayscale(0);
+          opacity: 1;
+        }
+      }
+    }
+
+    .dubbing-card-status-label,
+    .dubbing-card-status-date {
+      font-family: var(--font-family-rg-b);
+      font-size: var(--font-size-small);
+      font-weight: 700;
+      padding-top: 2px;
+    }
+
+    .dubbing-card-status-date {
+      color: var(--font-color-secondary);
+    }
+  }
+`
+
+export const DubbingCategoriesHeaderStyle = styled.div`
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 170px;
+  padding: 20px 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+
+  border: 1px solid rgba(194, 67, 233, 0.1);
+  background-image:
+    url(${Assets.Icon.glossyPoint.src}),
+    linear-gradient(
+      93deg,
+      rgba(147, 218, 246, 0.5) 0%,
+      rgba(243, 192, 251, 0.5) 100%
+    );
+  background-size:
+    12px,
+    100% 100%;
+  background-position:
+    top 8px left 8px,
+    center;
+  background-repeat: no-repeat, no-repeat;
+
+  ${phone(`
+    min-height: 140px;
+    padding: 15px 25px;
+  `)}
+
+  .dubbing-categories-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .dubbing-categories-header-title {
+    margin: 0;
+    font-size: var(--font-size-xxlarge);
+    font-weight: 700;
+    font-family: var(--font-family-rg-b);
+
+    ${phone(`
+      font-size: var(--font-size-xlarge);
+    `)}
+  }
+
+  .dubbing-categories-header-subtitle {
+    margin: 0;
+    font-size: var(--font-size-large);
+    font-weight: 500;
+    color: var(--font-color-secondary);
+    font-family: var(--font-family-rg-b);
+    line-height: 1.4;
+
+    ${phone(`
+      font-size: var(--font-size-medium);
+    `)}
+  }
+
+  .dubbing-categories-header-image {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ${phone(`
+      margin-left: auto;
+    `)}
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: 140px;
+      max-height: 130px;
+      object-fit: contain;
+
+      ${phone(`
+        max-width: 100px;
+        max-height: 100px;
+      `)}
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-image: url(${Assets.Image.GlossyBgBigWhite25.src});
+    background-size: auto 100%;
+    background-position: top 0 left 0;
+    background-repeat: no-repeat;
+    animation: var(--animation-glass-complete);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
   }
 `

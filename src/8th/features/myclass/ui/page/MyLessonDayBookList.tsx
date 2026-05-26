@@ -7,9 +7,10 @@ import {
 } from '@/8th/features/myclass/model/my-lesson-demo'
 import MyLessonBookItem from '@/8th/features/myclass/ui/component/MyLessonBookItem'
 import { DailyRGCourseListStyle } from '@/8th/shared/styled/FeaturesStyled'
-import { BoxStyle, Divide, Gap } from '@/8th/shared/ui/Misc'
+import { BoxStyle, Divide, Gap, TextStyle } from '@/8th/shared/ui/Misc'
 import { SubPageNavHeader } from '@/8th/shared/ui/SubPageNavHeader'
 import SITE_PATH from '@/app/site-path'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useLayoutEffect } from 'react'
 
@@ -49,11 +50,19 @@ export default function MyLessonDayBookList({ dayId }: Props) {
         {groups.map((group) => (
           <div key={group.title}>
             <Gap size={15} />
-            <Divide
-              title={
-                group.classes ? `${group.classes} ${group.title}` : group.title
-              }
-            />
+            <BoxStyle
+              display="flex"
+              flexDirection="row"
+              gap={5}
+              alignItems="center"
+              padding="5px 2px">
+              <TextStyle fontColor="secondary">•</TextStyle>
+              <TextStyle fontSize="large">
+                {group.classes
+                  ? `${group.classes} ${group.title}`
+                  : group.title}
+              </TextStyle>
+            </BoxStyle>
             <div>
               {group.lessons.map((book) => (
                 <MyLessonBookItem

@@ -28,7 +28,7 @@ export default function HallOfFameInfoModal({
           width="100%"
           height="auto"
           style={{
-            height: 'calc(100vh - 200px)',
+            height: 'calc(100vh - 81px)',
             border: 'none',
           }}
         />

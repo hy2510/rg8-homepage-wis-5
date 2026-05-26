@@ -20,7 +20,9 @@ export interface BookItemProps {
   src: string
   levelName: string
   recommendedAge: string
-  homeworkYn?: boolean
+  /** 제목 위 표시 날짜 */
+  displayDate?: string
+  assignmentsYn?: boolean
   isCheckable?: boolean
   isChecked?: boolean
   isDisabled?: boolean
@@ -38,7 +40,8 @@ export default function BookItem({
   src,
   levelName,
   recommendedAge,
-  homeworkYn,
+  displayDate,
+  assignmentsYn,
   isCheckable,
   isChecked,
   isDisabled,
@@ -129,31 +132,32 @@ export default function BookItem({
             )}
             <div className="badges">
               {/* To-Do에 추가된 도서 */}
-              {homeworkYn && (
+              {assignmentsYn && (
                 <Image
-                  src={Assets.Icon.Study.homeworkMark}
+                  src={Assets.Icon.Study.assignmentsMark}
                   alt="badge"
                   width={40}
                   height={40}
                 />
               )}
-              {isInProgressInTodo ? (
-                <Image
-                  src={Assets.Icon.Study.inProgressMarkInTodo}
-                  alt="badge"
-                  width={40}
-                  height={40}
-                />
-              ) : (
-                addYn && (
+              {!assignmentsYn &&
+                (isInProgressInTodo ? (
                   <Image
-                    src={Assets.Icon.Study.inProgressMark}
+                    src={Assets.Icon.Study.inProgressMarkInTodo}
                     alt="badge"
                     width={40}
                     height={40}
                   />
-                )
-              )}
+                ) : (
+                  addYn && (
+                    <Image
+                      src={Assets.Icon.Study.inProgressMark}
+                      alt="badge"
+                      width={40}
+                      height={40}
+                    />
+                  )
+                ))}
               {/* 1회차 완료시 */}
               {passCount === 1 && (
                 <Image
@@ -198,6 +202,7 @@ export default function BookItem({
             className="book-code-bg"
             style={{ backgroundImage: `url(${src})` }}></div>
         </div>
+        {displayDate && <div className="date">{displayDate}</div>}
         <div
           className="book-info-container"
           onClick={(e) => {

@@ -1,9 +1,16 @@
 'use client'
 
+import { Assets } from '@/8th/assets/asset-library'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import {
   BoxStyled,
   DivideLineStyle,
   DivideStyle,
+  DropdownButtonSmallContainerStyle,
+  DropdownButtonSmallStyle,
+  DropdownSmallItemStyle,
+  DropdownSmallMenuStyle,
   GapStyle,
   SelectBoxStyle,
   TextDivStyled,
@@ -561,6 +568,100 @@ export function SelectBox({
         ))}
       </select>
     </SelectBoxStyle>
+  )
+}
+
+interface DropdownProps {
+  selectedValue: string
+  onChange: (value: { key: string; label: string }) => void
+  options: { key: string; label: string }[]
+  largeFont?: boolean
+  mediumFont?: boolean
+  placeholder?: string
+  minWidth?: number
+}
+
+export function Dropdown({
+  selectedValue,
+  onChange,
+  options,
+  largeFont = false,
+  mediumFont = false,
+  placeholder = 'Select',
+  minWidth = 0,
+}: DropdownProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [isMenuOpen, setMenuOpen] = useState(false)
+  const title = selectedValue || placeholder
+  const hasSelection = !!selectedValue
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false)
+      }
+    }
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      if (isMenuOpen) {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [isMenuOpen])
+
+  return (
+    <DropdownButtonSmallContainerStyle
+      ref={dropdownRef}
+      style={{ minWidth: minWidth ? `${minWidth}px` : undefined }}>
+      <DropdownButtonSmallStyle onClick={() => setMenuOpen(!isMenuOpen)}>
+        <div
+          className={`link-text ${hasSelection ? 'black' : ''} ${largeFont ? 'large-text' : ''} ${mediumFont ? 'medium-text' : ''}`}>
+          {title}
+        </div>
+        <div className="icon">
+          <Image
+            src={Assets.Icon.chevronDownGraySmall}
+            alt=""
+            width={14}
+            height={14}
+            style={{
+              transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            }}
+          />
+        </div>
+      </DropdownButtonSmallStyle>
+      {isMenuOpen && options.length > 0 && (
+        <DropdownSmallMenuStyle position="left">
+          {options.map((option) => {
+            const isSelected = option.label === selectedValue
+            return (
+              <DropdownSmallItemStyle
+                key={option.key}
+                isSelected={isSelected}
+                onClick={() => {
+                  onChange(option)
+                  setMenuOpen(false)
+                }}>
+                <div className="item-text">{option.label}</div>
+                {isSelected && (
+                  <Image
+                    src={Assets.Icon.checkLightBlue}
+                    alt=""
+                    width={12}
+                    height={12}
+                  />
+                )}
+              </DropdownSmallItemStyle>
+            )
+          })}
+        </DropdownSmallMenuStyle>
+      )}
+    </DropdownButtonSmallContainerStyle>
   )
 }
 

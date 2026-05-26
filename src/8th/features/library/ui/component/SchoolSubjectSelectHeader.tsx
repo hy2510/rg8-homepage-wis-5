@@ -1,5 +1,8 @@
 import { Assets } from '@/8th/assets/asset-library'
-import { SelectBox } from '@/8th/shared/ui/Misc'
+import ActionBar, {
+  type LibraryActionBarProps,
+} from '@/8th/features/library/ui/component/LibraryActionBar'
+import { BoxStyle, Dropdown, TextStyle } from '@/8th/shared/ui/Misc'
 import Image from 'next/image'
 
 export type SchoolSubjectOption = {
@@ -13,100 +16,70 @@ export function SchoolSubjectSelectHeader({
   lesson,
   lessonTitle,
   onLessonInfoClick,
-  isMobile = false,
+  actionBar,
 }: {
-  // grade: string
   grade: SchoolSubjectOption
   publisher: SchoolSubjectOption
   lesson: SchoolSubjectOption
   lessonTitle?: string
   onLessonInfoClick?: () => void
-  isMobile?: boolean
+  actionBar?: LibraryActionBarProps
 }) {
   const isActiveShowLessonInfo = !!lessonTitle && !!onLessonInfoClick
   return (
-    <>
-      <div
-        style={{
-          marginBottom: '-20px',
-        }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            minHeight: '60px',
-            borderTop: '1px solid var(--line-color-primary)',
-            borderBottom: '1px solid var(--line-color-primary)',
-            gap: isMobile ? 6 : 16,
-            alignItems: 'center',
-            padding: '0 10px',
-          }}>
-          <SelectBox
-            placeholder={'학년'}
-            selectedValue={grade.current}
-            largeFont
-            onChange={(value) => grade.onChange(value)}
-            options={grade.options}
-          />
-          <SelectBox
-            placeholder={'교과서'}
-            selectedValue={publisher.current}
-            largeFont
-            onChange={(value) => publisher.onChange(value)}
-            options={publisher.options}
-            minWidth={160}
-          />
-          <SelectBox
-            placeholder={'단원'}
-            selectedValue={lesson.current}
-            largeFont
-            onChange={(value) => lesson.onChange(value)}
-            options={lesson.options}
-            minWidth={80}
-          />
-        </div>
-        {lessonTitle && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              marginTop: isMobile ? '4px' : '20px',
-              padding: isMobile ? '15px 10px' : '15px 10px 0 10px',
-            }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span
-                style={{
-                  display: 'inline',
-                  fontSize: 16,
-                  fontWeight: '500',
-                  color: 'black',
-                }}>
-                {lessonTitle}
-              </span>
-              {isActiveShowLessonInfo && (
-                <div
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    marginLeft: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                  }}
-                  onClick={onLessonInfoClick}>
-                  <Image
-                    src={Assets.Icon.zoomIn}
-                    alt="zoom-in"
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    </>
+    <BoxStyle display="flex" flexDirection="column" gap={10}>
+      <BoxStyle display="flex" gap={15} padding="10px">
+        <Dropdown
+          placeholder={'학년'}
+          selectedValue={grade.current}
+          onChange={(value) => grade.onChange(value)}
+          options={grade.options}
+          mediumFont
+        />
+        <Dropdown
+          placeholder={'교과서'}
+          selectedValue={publisher.current}
+          onChange={(value) => publisher.onChange(value)}
+          options={publisher.options}
+          mediumFont
+        />
+        <Dropdown
+          placeholder={'단원'}
+          selectedValue={lesson.current}
+          onChange={(value) => lesson.onChange(value)}
+          options={lesson.options}
+          mediumFont
+        />
+      </BoxStyle>
+      {lessonTitle && (
+        <BoxStyle
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          borderTop="1px solid var(--line-color-primary)"
+          padding="10px 10px 0 10px">
+          <TextStyle fontFamily="sans" fontSize="large" fontWeight={700}>
+            {lessonTitle}
+          </TextStyle>
+          {isActiveShowLessonInfo && (
+            <BoxStyle
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="40px"
+              height="40px"
+              onClick={onLessonInfoClick}>
+              <Image
+                src={Assets.Icon.zoonInGray.src}
+                alt="zoom-in"
+                width={20}
+                height={20}
+              />
+            </BoxStyle>
+          )}
+        </BoxStyle>
+      )}
+      {actionBar && <ActionBar {...actionBar} />}
+    </BoxStyle>
   )
 }

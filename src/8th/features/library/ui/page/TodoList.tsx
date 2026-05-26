@@ -14,6 +14,7 @@ import {
   useStudentHistoryList,
 } from '@/8th/features/student/service/student-query'
 import { TodoBook } from '@/8th/features/todo/model/todo-book'
+import { formatTodoGroupDateLabel } from '@/8th/features/todo/utils/todo-book-date'
 import {
   useDeleteAllTodo,
   useTodoList,
@@ -315,7 +316,7 @@ function BookList() {
       })
     dates.forEach((date) => {
       groupTodos.push({
-        group: DateUtils.toRgDateEnglishFormat(date),
+        group: formatTodoGroupDateLabel(date),
         todos: allTodos.filter((todo) => todo.openDate === date),
       })
     })
@@ -454,7 +455,7 @@ function BookList() {
           return (
             <BookListDateGroupStyle key={item.group} isTodoList>
               <TextStyle fontSize="medium" fontColor="secondary">
-                {`+ ${item.group}`}
+                {item.group}
               </TextStyle>
               <Gap size={15} />
               <BookListView
@@ -526,7 +527,7 @@ function BookListView({
             point={book.getableRgPoint}
             src={book.surfaceImagePath}
             levelName={book.levelName}
-            homeworkYn={book.homeworkYn}
+            assignmentsYn={book.assignmentsYn}
             recommendedAge={book.recommendedAge}
             isCheckable={book.isCheckable}
             isDisabled={book.isDisabled}

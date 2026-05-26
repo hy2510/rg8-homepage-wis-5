@@ -19,6 +19,8 @@ export type CustomerConfiguration = {
     paymentUrl: string
   }
   menu: {
+    dubbing: { open: boolean }
+    movies: { open: boolean }
     dailyRg: { open: boolean }
     eb: {
       open: boolean
@@ -200,6 +202,8 @@ export function buildCustomerConfiguration_TEST(
       paymentUrl: paymentUrl,
     },
     menu: {
+      dubbing: { open: true },
+      movies: { open: true },
       dailyRg: { open: true },
       eb: {
         open: true,
@@ -385,6 +389,14 @@ export function buildCustomerConfiguration(
       paymentUrl: needPayment === 'Y' ? paymentUrl : '',
     },
     menu: {
+      dubbing: {
+        open:
+          target === 'private' || target === 'school' || target === 'academy',
+      },
+      movies: {
+        open:
+          target === 'private' || target === 'school' || target === 'academy',
+      },
       dailyRg: { open: target === 'private' || target === 'school' },
       eb: {
         open: studyEBUseYn,

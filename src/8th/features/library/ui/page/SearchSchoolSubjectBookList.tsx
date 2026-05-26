@@ -1,7 +1,6 @@
 'use client'
 
 import { useCustomerConfiguration } from '@/8th/application/context/CustomerContext'
-import { useIsPhone } from '@/8th/application/context/ScreenModeContext'
 import {
   useSchoolSubjectLessonInfo,
   useSchoolSubjectPublisher,
@@ -10,9 +9,7 @@ import { useSearchSchoolSubject } from '@/8th/features/library/service/search-qu
 import BookItem, {
   SkeletonBookItem,
 } from '@/8th/features/library/ui/component/BookItem'
-import ActionBar, {
-  ActionBarDropdownItem,
-} from '@/8th/features/library/ui/component/LibraryActionBar'
+import { ActionBarDropdownItem } from '@/8th/features/library/ui/component/LibraryActionBar'
 import {
   SchoolSubjectOption,
   SchoolSubjectSelectHeader,
@@ -147,6 +144,7 @@ function LibraryBookListDependency({
     <>
       <SubPageNavHeader
         title={`${t('t8th313')}`}
+        titleFontFamily="sans"
         parentPath={
           bookType === 'EB'
             ? SITE_PATH.STUDENT_8TH.EB
@@ -184,7 +182,6 @@ function LibraryBookList({
   // @Language 'common'
   const { t } = useTranslation()
 
-  const isMobile = useIsPhone()
   const router = useRouter()
   const { setting } = useCustomerConfiguration()
 
@@ -540,29 +537,31 @@ function LibraryBookList({
             ? onLessonInfoClick
             : undefined
         }
-        isMobile={isMobile}
+        actionBar={
+          isOptionActive
+            ? {
+                title: actionBarTitle,
+                count: searchCount,
+                dropdowns: [
+                  {
+                    title: t('t8th014'),
+                    items: exportItems,
+                    onItemClick: onExportItemClick,
+                  },
+                ],
+                exportPanel: {
+                  isOpen: isExportMode,
+                  title: `${t('t8th014')} / ${exportItems.find((item) => item.key === `Export${exportMode}`)?.label || exportMode}`,
+                  count: selectedItemCount,
+                  onCancel: () => onChangeExportMode('none'),
+                  onConfirm: onConfirmExport,
+                },
+              }
+            : undefined
+        }
       />
       {isOptionActive ? (
         <>
-          {/* 검색할 대상이 있을 경우 검색 결과 UI 표시 */}
-          <ActionBar
-            title={actionBarTitle}
-            count={searchCount}
-            dropdowns={[
-              {
-                title: t('t8th014'),
-                items: exportItems,
-                onItemClick: onExportItemClick,
-              },
-            ]}
-            exportPanel={{
-              isOpen: isExportMode,
-              title: `${t('t8th014')} / ${exportItems.find((item) => item.key === `Export${exportMode}`)?.label || exportMode}`,
-              count: selectedItemCount,
-              onCancel: () => onChangeExportMode('none'),
-              onConfirm: onConfirmExport,
-            }}
-          />
           {searchCount > 0 ? (
             <>
               <BookListStyle>

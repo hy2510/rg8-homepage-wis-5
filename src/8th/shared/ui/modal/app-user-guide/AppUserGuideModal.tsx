@@ -1,6 +1,7 @@
 'use client'
 
 import { useCustomerInfo } from '@/8th/application/context/CustomerContext'
+import { useIsPhone } from '@/8th/application/context/ScreenModeContext'
 import { useUpdateStudentLocalConfig } from '@/8th/features/student/service/setting-query'
 import { useStudent } from '@/8th/features/student/service/student-query'
 import {
@@ -9,7 +10,7 @@ import {
 } from '@/8th/shared/styled/SharedStyled'
 import useTranslation from '@/localization/client/useTranslations'
 import { useEffect, useRef } from 'react'
-import { BoxStyle } from '../../Misc'
+import { BoxStyle, TextStyle } from '../../Misc'
 import { ModalContainer } from '../../Modal'
 
 export default function AppUserGuideModal({
@@ -35,6 +36,7 @@ export default function AppUserGuideModal({
     }
   }, [])
 
+  const isPhone = useIsPhone()
   const { customerId } = useCustomerInfo()
   const student = useStudent()
   const studentId = student.data?.student?.studentId || ''
@@ -62,33 +64,33 @@ export default function AppUserGuideModal({
           width="100%"
           height="auto"
           style={{
-            height: 'calc(100vh - 200px)',
+            height: isInitialPopup
+              ? `calc(100vh - ${isPhone ? 141 : 250}px)`
+              : 'calc(100vh - 81px)',
             border: 'none',
           }}
         />
       </ModalBodyStyle>
       {isInitialPopup && (
-        <BoxStyle
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          height={'56px'}>
-          <button
+        <>
+          <BoxStyle
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            height={'60px'}
             onClick={() => {
               onClickDoNotAutoShow(true)
-            }}
-            style={{
-              width: 'auto',
-              padding: '10px 20px',
-              borderRadius: '10px',
-              color: '#666',
-              border: 'solid 1px #e1e1e1',
-              fontFamily: 'var(--font-family-secondary)',
-              fontSize: 'var(--font-size-medium)',
             }}>
-            {t('t8th319')}
-          </button>
-        </BoxStyle>
+            <TextStyle
+              fontFamily="sans"
+              fontSize="medium"
+              fontWeight={500}
+              fontColor="var(--font-color-secondary)"
+              padding="0 0 10px 0">
+              {t('t8th319')}
+            </TextStyle>
+          </BoxStyle>
+        </>
       )}
     </ModalContainer>
   )

@@ -6,7 +6,7 @@ import {
   CollectionItemStyled,
   CollectionsStyled,
 } from '@/8th/shared/styled/FeaturesStyled'
-import { BoxStyle } from '@/8th/shared/ui/Misc'
+import { BoxStyle, TextStyle } from '@/8th/shared/ui/Misc'
 import SITE_PATH from '@/app/site-path'
 import useTranslation from '@/localization/client/useTranslations'
 import Image, { StaticImageData } from 'next/image'
@@ -219,7 +219,12 @@ export function CollectionItem({
                 height={iconHeight}
               />
             </div>
-            {children}
+            <TextStyle
+              fontFamily="rg-b"
+              fontSize="large"
+              fontWeight={children === '교과 연계 도서' ? 800 : 500}>
+              {children}
+            </TextStyle>
           </BoxStyle>
           <Image
             src={Assets.Icon.chevronRightGray}

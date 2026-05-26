@@ -4,12 +4,6 @@ import { useCustomerConfiguration } from '@/8th/application/context/CustomerCont
 import { useIsTabletSmall } from '@/8th/application/context/ScreenModeContext'
 import { Assets } from '@/8th/assets/asset-library'
 import {
-  useLevelPoints,
-  useReadingKingTrophy,
-} from '@/8th/features/achieve/service/achieve-query'
-import ChallengeTrophyCard from '@/8th/features/achieve/ui/component/ChallengeTrophyCard'
-import LevelMasterCard from '@/8th/features/achieve/ui/component/LevelMasterCard'
-import {
   useExportReport,
   useExportVocabulary,
   useExportWorksheet,
@@ -19,15 +13,12 @@ import {
   useDeleteFavorite,
 } from '@/8th/features/library/service/library-query'
 import PrintVocabularyModal from '@/8th/features/library/ui/modal/PrintVocabularyModal'
-import { usePointRank } from '@/8th/features/rank/service/rank-query'
-import RankCard from '@/8th/features/rank/ui/component/RankCard'
 import { HistoryStudy } from '@/8th/features/review/model/history-study'
 import {
   useHistoryBookDetailInfo,
   useHistoryReadingInfinite,
 } from '@/8th/features/review/service/history-query'
 import ReviewBookItem from '@/8th/features/review/ui/component/ReviewItem'
-import { useStudentDailyLearning } from '@/8th/features/student/service/learning-query'
 import {
   useStudentAvatarList,
   useStudentEarnReadingUnit,
@@ -40,14 +31,15 @@ import { RecentReviewListStyle } from '@/8th/shared/styled/FeaturesStyled'
 import { RoundedFullButton } from '@/8th/shared/ui/Buttons'
 import { BoxStyle, TextStyle } from '@/8th/shared/ui/Misc'
 import { openWindow } from '@/8th/shared/utils/open-window'
-import SITE_PATH from '@/app/site-path'
 import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
 import useTranslation from '@/localization/client/useTranslations'
 import DateUtils from '@/util/date-utils'
 import NumberUtils from '@/util/number-utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
+import { getActivityPaths } from '@/8th/shared/utils/activity-paths'
 
 export default function ActivityMain() {
   const maketingEventTracker = useTrack()
@@ -58,12 +50,14 @@ export default function ActivityMain() {
     })
   }, [maketingEventTracker])
 
-  const { menu, setting } = useCustomerConfiguration()
+  const { menu } = useCustomerConfiguration()
 
   // @Language 'common'
   const { t } = useTranslation()
 
   const isMobile = useIsTabletSmall('smaller')
+  const pathname = usePathname()
+  const activityPaths = getActivityPaths(pathname)
 
   const dateParams = useMemo(() => {
     const endDate = new Date()
@@ -89,20 +83,11 @@ export default function ActivityMain() {
   const avatar = useStudentAvatarList()
   const readingUnit = useStudentEarnReadingUnit()
 
-  const learning = useStudentDailyLearning()
-  const levels = useLevelPoints()
-  const trophy = useReadingKingTrophy()
-  const ranking = usePointRank({ type: 'total' })
-
   if (
     student.isLoading ||
     avatar.isLoading ||
     readingUnit.isLoading ||
-    history.isLoading ||
-    learning.isLoading ||
-    levels.isLoading ||
-    trophy.isLoading ||
-    ranking.isLoading
+    history.isLoading
   ) {
     return <></>
   }
@@ -110,11 +95,7 @@ export default function ActivityMain() {
     student.isError ||
     avatar.isError ||
     readingUnit.isError ||
-    history.isError ||
-    learning.isError ||
-    levels.isError ||
-    trophy.isError ||
-    ranking.isError
+    history.isError
   ) {
     return <></>
   }
@@ -131,25 +112,6 @@ export default function ActivityMain() {
     history.data && history.data.pages.length > 0
       ? history.data.pages[0].history.filter((history, i) => i < 3)
       : []
-
-  const levelName = learning.data?.settingLevelName || 'PK'
-  const level =
-    levels.data &&
-    levels.data.list &&
-    levels.data.list.find((level) => level.levelName === levelName)
-  const earnPoint = level?.myRgPoint || 0
-  const maxPoint = level?.requiredRgPoint || 0
-  const latestTrophy = trophy.data?.list?.[0]
-  const trophyData = latestTrophy
-    ? {
-        title: latestTrophy.prizeTitle,
-        grade: latestTrophy.prizeGrade,
-        registDate: latestTrophy.registDate,
-      }
-    : undefined
-  const userRanking = menu.rank.monthly.open
-    ? ranking.data?.user?.totalRank || 0
-    : -1
 
   let remainingStudyDays = -1
   if (menu.account.studentInfo.studyAvaliableDay.open) {
@@ -174,18 +136,6 @@ export default function ActivityMain() {
           />
         )}
       </div>
-      <div style={{ order: isMobile ? 4 : 2 }}>
-        <StudentAchievements
-          level={levelName}
-          earnPoint={earnPoint}
-          maxPoint={maxPoint}
-          rank={userRanking}
-          trophy={trophyData}
-          isOpenLevelChange={menu.myLevelSetting.open}
-          isOpenRank={menu.rank.open}
-          isOpenTrophy={setting.showReadingking}
-        />
-      </div>
       {menu.activity.result.open && menu.activity.result.read.open && (
         <>
           <div style={{ order: isMobile ? 2 : 3 }}>
@@ -193,7 +143,7 @@ export default function ActivityMain() {
           </div>
           <div style={{ order: isMobile ? 3 : 4 }}>
             <Link
-              href={`${SITE_PATH.STUDENT_8TH.REVIEW}?startDate=${dateParams.startDate}&endDate=${dateParams.endDate}`}>
+              href={`${activityPaths.review}?startDate=${dateParams.startDate}&endDate=${dateParams.endDate}`}>
               <RoundedFullButton
                 onClick={undefined}
                 fontColor="var(--font-color-primary)">
@@ -222,62 +172,6 @@ export default function ActivityMain() {
         </>
       )}
     </>
-  )
-}
-
-function StudentAchievements({
-  level,
-  earnPoint,
-  maxPoint,
-  rank,
-  trophy,
-  isOpenLevelChange,
-  isOpenRank,
-  isOpenTrophy,
-}: {
-  level: string
-  earnPoint: number
-  maxPoint: number
-  rank: number
-  trophy?: {
-    title: string
-    grade: number
-    registDate: string
-  }
-  isOpenLevelChange: boolean
-  isOpenRank: boolean
-  isOpenTrophy: boolean
-}) {
-  // @Language 'common'
-  const { t } = useTranslation()
-
-  const isMobile = useIsTabletSmall('smaller')
-
-  return (
-    <BoxStyle display="flex" flexDirection="column" gap={20}>
-      <TextStyle fontSize="large">{t('t8th075')}</TextStyle>
-      <BoxStyle
-        width={isMobile ? '100%' : 'auto'}
-        display="flex"
-        flexDirection={isMobile ? 'column' : 'row'}
-        gap={isMobile ? 10 : 15}>
-        <BoxStyle
-          width={isMobile ? '100%' : 'auto'}
-          display="flex"
-          flexDirection="row"
-          gap={isMobile ? 10 : 15}>
-          {isOpenLevelChange && (
-            <LevelMasterCard
-              level={level}
-              earnPoints={earnPoint}
-              levelMasterPoint={maxPoint}
-            />
-          )}
-          {isOpenRank && <RankCard rank={rank} />}
-        </BoxStyle>
-        {isOpenTrophy && <ChallengeTrophyCard trophy={trophy} />}
-      </BoxStyle>
-    </BoxStyle>
   )
 }
 

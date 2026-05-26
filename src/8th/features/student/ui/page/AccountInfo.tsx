@@ -2,6 +2,7 @@
 
 import { useCustomerConfiguration } from '@/8th/application/context/CustomerContext'
 import LibraryTabBar from '@/8th/features/library/ui/component/LibraryTabBar'
+import LibraryTabBarDnf from '@/8th/features/librarydnf/ui/component/LibraryTabBarDnf'
 import { useAdjustHistoryList } from '@/8th/features/payment/service/payment-query'
 import {
   useChangeContinuousStudyType,
@@ -33,7 +34,10 @@ import {
   isValidateStudentName,
   isValidateStudentNameKr,
 } from '@/8th/shared/utils/validation'
-import SITE_PATH from '@/app/site-path'
+import {
+  getAccountPaths,
+  isDodonFriendsAccountPath,
+} from '@/8th/shared/utils/account-paths'
 import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
 import useTranslation from '@/localization/client/useTranslations'
 import DateUtils from '@/util/date-utils'
@@ -61,6 +65,11 @@ export default function AccountInfo() {
   const { t } = useTranslation()
 
   const pathname = usePathname()
+  const accountPaths = getAccountPaths(pathname)
+  const TabBar = isDodonFriendsAccountPath(pathname)
+    ? LibraryTabBarDnf
+    : LibraryTabBar
+  const isDodonfriends = isDodonFriendsAccountPath(pathname)
 
   const { data } = useStudent()
   const studentHistory = useStudentHistoryList()
@@ -170,20 +179,20 @@ export default function AccountInfo() {
 
   const paymentUrl = setting.paymentable ? setting.paymentUrl : undefined
 
-  const tabBarItems: React.ComponentProps<typeof LibraryTabBar>['items'] = []
+  const tabBarItems: React.ComponentProps<typeof TabBar>['items'] = []
   if (menu.account.setting.open) {
     tabBarItems.push({
-      href: SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING,
-      active: pathname.includes(SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING),
+      href: accountPaths.accountInfoSetting,
+      active: pathname.includes(accountPaths.accountInfoSetting),
       label: t('t8th336'),
     })
   }
   if (menu.account.studentInfo.open) {
     tabBarItems.push({
-      href: SITE_PATH.STUDENT_8TH.ACCOUNTINFO,
+      href: accountPaths.accountInfo,
       active:
-        pathname.includes(SITE_PATH.STUDENT_8TH.ACCOUNTINFO) &&
-        !pathname.includes(SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING),
+        pathname.includes(accountPaths.accountInfo) &&
+        !pathname.includes(accountPaths.accountInfoSetting),
       label: t('t8th337'),
     })
   }
@@ -191,9 +200,9 @@ export default function AccountInfo() {
     <>
       <SubPageNavHeader
         title={t('t8th335')}
-        parentPath={SITE_PATH.STUDENT_8TH.ACTIVITY}
+        parentPath={accountPaths.activity}
       />
-      {tabBarItems.length > 1 && <LibraryTabBar items={tabBarItems} />}
+      {tabBarItems.length > 1 && <TabBar items={tabBarItems} />}
       <BoxStyle
         display="flex"
         flexDirection="column"
@@ -237,7 +246,7 @@ export default function AccountInfo() {
             onEditModeCancel={onEditModeCancel}
           />
         )}
-        {menu.account.studentInfo.phoneNumber.open && (
+        {!isDodonfriends && menu.account.studentInfo.phoneNumber.open && (
           <PhoneNumber
             phoneNumber={phone.value}
             readOnly={!menu.account.studentInfo.phoneNumber.editable}
@@ -247,11 +256,11 @@ export default function AccountInfo() {
           />
         )}
 
-        {menu.account.studentInfo.smsNotice.open && (
+        {!isDodonfriends && menu.account.studentInfo.smsNotice.open && (
           <CheckSmsAgreement isSmsAgree={isSmsAgree || false} />
         )}
 
-        {isOpenExtraOption && (
+        {!isDodonfriends && isOpenExtraOption && (
           <ExtraOptionLayoutStyle>
             {menu.account.studentInfo.strekSetting.open &&
               continuousViewType && (
@@ -286,7 +295,7 @@ export default function AccountInfo() {
         )}
 
         {/* POPUP MODAL */}
-        {isShowSuspendSettingModal && (
+        {!isDodonfriends && isShowSuspendSettingModal && (
           <SuspendSettingModal
             currentPause={studyState === 'PAUSED'}
             onClickClose={() => {
@@ -294,7 +303,7 @@ export default function AccountInfo() {
             }}
           />
         )}
-        {isShowWithDrawModal && (
+        {!isDodonfriends && isShowWithDrawModal && (
           <WithDrawModal
             onClickClose={() => {
               setShowWithDrawModal(false)

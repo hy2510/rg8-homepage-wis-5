@@ -3,10 +3,11 @@
 import { Assets } from '@/8th/assets/asset-library'
 import { StudentInfoCardStyle } from '@/8th/shared/styled/FeaturesStyled'
 import { BoxStyle } from '@/8th/shared/ui/Misc'
-import SITE_PATH from '@/app/site-path'
+import { getAccountPaths } from '@/8th/shared/utils/account-paths'
 import useTranslation from '@/localization/client/useTranslations'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 /**
  * 이름, 랭킹, 점수, Todo, Favorite 카드
@@ -37,6 +38,8 @@ export default function StudentInfoCard({
 }: StudentInfoCardProps) {
   // @Language 'common'
   const { t } = useTranslation()
+  const pathname = usePathname()
+  const accountPaths = getAccountPaths(pathname)
 
   const cardComponent = (
     <StudentInfoCardStyle>
@@ -87,12 +90,10 @@ export default function StudentInfoCard({
 
   if (isOpenSetting) {
     return (
-      <Link href={SITE_PATH.STUDENT_8TH.ACCOUNTINFO_SETTING}>
-        {cardComponent}
-      </Link>
+      <Link href={accountPaths.accountInfoSetting}>{cardComponent}</Link>
     )
   } else if (isOpenAccountInfo) {
-    return <Link href={SITE_PATH.STUDENT_8TH.ACCOUNTINFO}>{cardComponent}</Link>
+    return <Link href={accountPaths.accountInfo}>{cardComponent}</Link>
   }
   return cardComponent
 }

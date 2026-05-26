@@ -129,14 +129,14 @@ export default function RankChallengeGroupItem({
               fontFamily="sans"
               fontSize="small"
               textAlign="right">
-              {`${book} Reads`}
+              {`Reads · ${book}`}
             </TextStyle>
             <TextStyle
               fontColor="primary"
               fontFamily="sans"
               fontSize="small"
               textAlign="right">
-              {`+${point}P`}
+              {`Points · ${point}P`}
             </TextStyle>
           </BoxStyle>
         </BoxStyle>

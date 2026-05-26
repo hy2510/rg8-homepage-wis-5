@@ -269,7 +269,9 @@ export default function CalendarModal({ onCloseModal }: CalendarModalProps) {
               height={20}
             />
           </button>
-          <div className="title">{formatMonthYear(currentDate)}</div>
+          <div className="title calendar-title">
+            {formatMonthYear(currentDate)}
+          </div>
           <button
             className="nav-button next"
             onClick={handleNextMonth}

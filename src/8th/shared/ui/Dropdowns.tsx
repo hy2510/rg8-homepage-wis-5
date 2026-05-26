@@ -1,11 +1,12 @@
 'use client'
 
 import { Assets } from '@/8th/assets/asset-library'
-import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import Image, { StaticImageData } from 'next/image'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   DropdownContainerStyle,
   DropdownContainerStyleProps,
+  DropdownGnbIconRowStyle,
   DropdownItemStyle,
 } from '../styled/SharedStyled'
 import { BoxStyle } from './Misc'
@@ -14,11 +15,14 @@ import { BoxStyle } from './Misc'
  * 드롭다운 메뉴
  */
 
-interface DropdownMenuProps
-  extends Pick<DropdownContainerStyleProps, 'position' | 'viewGrid'> {
+interface DropdownMenuProps extends Pick<
+  DropdownContainerStyleProps,
+  'position' | 'viewGrid'
+> {
   items: {
     text: string
     subText?: string
+    icon?: StaticImageData
     onClick?: () => void
   }[]
   isOpen?: boolean
@@ -37,6 +41,27 @@ export default function DropdownMenu({
   currentIndex,
 }: DropdownMenuProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const { gnbItems, linkItems } = useMemo(() => {
+    const gnbItems: {
+      item: DropdownMenuProps['items'][number]
+      index: number
+    }[] = []
+    const linkItems: {
+      item: DropdownMenuProps['items'][number]
+      index: number
+    }[] = []
+
+    items.forEach((item, index) => {
+      if (item.icon) {
+        gnbItems.push({ item, index })
+      } else {
+        linkItems.push({ item, index })
+      }
+    })
+
+    return { gnbItems, linkItems }
+  }, [items])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,10 +89,14 @@ export default function DropdownMenu({
       position={position}
       ref={dropdownRef}
       viewGrid={viewGrid}>
-      {items.map((item, index) => (
+      {linkItems.map(({ item, index }) => (
         <DropdownItemStyle
           key={index}
-          onClick={item.onClick}
+          onClick={(event) => {
+            event.stopPropagation()
+            item.onClick?.()
+            onClose?.()
+          }}
           viewGrid={viewGrid}>
           <BoxStyle
             display="flex"
@@ -98,6 +127,36 @@ export default function DropdownMenu({
           )}
         </DropdownItemStyle>
       ))}
+      {gnbItems.length > 0 && (
+        <DropdownGnbIconRowStyle>
+          {gnbItems.map(({ item, index }) => (
+            <button
+              key={index}
+              type="button"
+              className="gnb-menu-item"
+              onClick={(event) => {
+                event.stopPropagation()
+                item.onClick?.()
+                onClose?.()
+              }}>
+              <div className="item-icon">
+                <Image src={item.icon!} alt="" width={34} height={34} />
+              </div>
+              <div className="gnb-menu-item-text">{item.text}</div>
+              {index === currentIndex && (
+                <div className="current">
+                  <Image
+                    src={Assets.Icon.checkLightBlue}
+                    alt="check"
+                    width={16}
+                    height={16}
+                  />
+                </div>
+              )}
+            </button>
+          ))}
+        </DropdownGnbIconRowStyle>
+      )}
     </DropdownContainerStyle>
   )
 }

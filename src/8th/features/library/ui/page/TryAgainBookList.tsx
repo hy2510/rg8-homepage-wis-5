@@ -16,7 +16,9 @@ import { SubPageNavHeader } from '@/8th/shared/ui/SubPageNavHeader'
 import SITE_PATH from '@/app/site-path'
 import { useTrack } from '@/external/marketing-tracker/component/MarketingTrackerContext'
 import useTranslation from '@/localization/client/useTranslations'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { getActivityPaths } from '@/8th/shared/utils/activity-paths'
 
 export default function TryAgainBookList() {
   return <LibraryBookListDependency />
@@ -27,6 +29,8 @@ function LibraryBookListDependency() {
   const { t } = useTranslation()
 
   const student = useStudent()
+  const pathname = usePathname()
+  const activityPaths = getActivityPaths(pathname)
 
   if (student.isLoading) {
     return <></>
@@ -36,7 +40,7 @@ function LibraryBookListDependency() {
     <>
       <SubPageNavHeader
         title={`${t('t8th041')}`}
-        parentPath={SITE_PATH.STUDENT_8TH.ACTIVITY}
+        parentPath={activityPaths.activity}
       />
       <BookList />
     </>

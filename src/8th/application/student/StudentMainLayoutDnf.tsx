@@ -12,8 +12,7 @@ import {
   useLevelPoints,
 } from '@/8th/features/achieve/service/achieve-query'
 import DailyGoalCard from '@/8th/features/achieve/ui/component/DailyGoalCard'
-import CalendarModal from '@/8th/features/achieve/ui/modal/CalendarModal'
-import StreakModal from '@/8th/features/achieve/ui/modal/StreakModal'
+import DodonFriendsCalendarModal from '@/8th/features/achieve/ui/modal/CalendarModalDnf'
 import { useSearchFavoriteBook } from '@/8th/features/library/service/search-query'
 import { usePointRank } from '@/8th/features/rank/service/rank-query'
 import { useHistoryReadingInfinite } from '@/8th/features/review/service/history-query'
@@ -90,6 +89,18 @@ const PAGE_CONFIG = {
     title: 'MY PAGE',
     icon: Assets.Icon.Gnb.myActivity,
   },
+  [SITE_PATH.DODON_FRIENDS.MOVIES]: {
+    title: 'MOVIES',
+    icon: Assets.Icon.Gnb.movies,
+  },
+  [SITE_PATH.DODON_FRIENDS.DUBBING]: {
+    title: 'DUBBING',
+    icon: Assets.Icon.Gnb.dubbing,
+  },
+  [SITE_PATH.DODON_FRIENDS.MY_CLASS]: {
+    title: 'MY CLASS',
+    icon: Assets.Icon.Gnb.myClass,
+  },
 } as const
 
 export default function StudentMainLayoutDnf({
@@ -114,14 +125,26 @@ export default function StudentMainLayoutDnf({
   } else if (
     pathname.endsWith(SITE_PATH.STUDENT_8TH.LIBRARY) ||
     pathname.endsWith(SITE_PATH.STUDENT_8TH.EB) ||
-    pathname.endsWith(SITE_PATH.STUDENT_8TH.PB)
+    pathname.endsWith(SITE_PATH.STUDENT_8TH.PB) ||
+    pathname.endsWith(SITE_PATH.DODON_FRIENDS.LIBRARY) ||
+    pathname.endsWith(SITE_PATH.DODON_FRIENDS.EB) ||
+    pathname.endsWith(SITE_PATH.DODON_FRIENDS.PB)
   ) {
     header = PAGE_CONFIG[SITE_PATH.STUDENT_8TH.LIBRARY]
     // } else if (pathname.endsWith(SITE_PATH.NW82.EB)) {
     //   header = PAGE_CONFIG[SITE_PATH.NW82.EB]
     // } else if (pathname.endsWith(SITE_PATH.NW82.PB)) {
     //   header = PAGE_CONFIG[SITE_PATH.NW82.PB]
-  } else if (pathname.endsWith(SITE_PATH.STUDENT_8TH.ACTIVITY)) {
+  } else if (pathname.endsWith(SITE_PATH.DODON_FRIENDS.MOVIES)) {
+    header = PAGE_CONFIG[SITE_PATH.DODON_FRIENDS.MOVIES]
+  } else if (pathname.endsWith(SITE_PATH.DODON_FRIENDS.DUBBING)) {
+    header = PAGE_CONFIG[SITE_PATH.DODON_FRIENDS.DUBBING]
+  } else if (pathname.includes(SITE_PATH.DODON_FRIENDS.MY_CLASS)) {
+    header = PAGE_CONFIG[SITE_PATH.DODON_FRIENDS.MY_CLASS]
+  } else if (
+    pathname.endsWith(SITE_PATH.STUDENT_8TH.ACTIVITY) ||
+    pathname.endsWith(SITE_PATH.DODON_FRIENDS.ACTIVITY)
+  ) {
     header = PAGE_CONFIG[SITE_PATH.STUDENT_8TH.ACTIVITY]
   }
   useEffect(() => {
@@ -139,7 +162,6 @@ export default function StudentMainLayoutDnf({
   }
 
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false)
-  const [isStreakModalOpen, setIsStreakModalOpen] = useState(false)
   const [isRightContainerOpen, setIsRightContainerOpen] = useState(false)
 
   /// right container
@@ -576,26 +598,10 @@ export default function StudentMainLayoutDnf({
                     {header.title}
                   </div>
                   <div className="menu">
-                    {menu.calendar.open && (
-                      <MenuItemCalendar
-                        onClick={() => setIsCalendarModalOpen(true)}
-                      />
-                    )}
-                    {menu.streak.open && (
-                      <MenuItemStreak
-                        isTodayStudy={isTodayStudy}
-                        streakCount={
-                          isStreakLegacyMode ? streakDay6th : streakDay
-                        }
-                        isStreakLegacyMode={isStreakLegacyMode}
-                        onClick={() => setIsStreakModalOpen(true)}
-                      />
-                    )}
                     <MenuItemAvatar
                       image={myAvatar?.imageCircle || ''}
                       avatarName={myAvatar?.name || ''}
                       medal={medalName}
-                      levelName={dailyLearning.data?.settingLevelName || 'PK'}
                       onClick={() => setIsRightContainerOpen(true)}
                     />
                   </div>
@@ -632,18 +638,18 @@ export default function StudentMainLayoutDnf({
                 point={NumberUtils.toRgDecimalPoint(
                   student.data?.student?.rgPoint || 0,
                 )}
-                todo={todo.data?.count || 0}
+                assignments={todo.data?.count || 0}
                 favorite={favorite.data?.page.totalRecords || 0}
-                isOpenTodo={menu.activity.todo.open}
+                isOpenAssignments={menu.activity.todo.open}
                 isOpenFavorite={menu.activity.favorite.open}
                 medal={medalName}
                 onLinkClick={(linkId) => {
                   if (linkId === 'activity') {
-                    router.push(SITE_PATH.STUDENT_8TH.ACTIVITY)
-                  } else if (linkId === 'todo') {
-                    router.push(SITE_PATH.STUDENT_8TH.TODO)
+                    router.push(SITE_PATH.DODON_FRIENDS.ACTIVITY)
+                  } else if (linkId === 'assignments') {
+                    router.push(SITE_PATH.DODON_FRIENDS.TODO)
                   } else if (linkId === 'favorite') {
-                    router.push(SITE_PATH.STUDENT_8TH.FAVORITE)
+                    router.push(SITE_PATH.DODON_FRIENDS.FAVORITE)
                   }
                   setIsRightContainerOpen(false)
                 }}
@@ -665,7 +671,9 @@ export default function StudentMainLayoutDnf({
                 />
               )} */}
               {/* <ReadingUnitCard point={point} /> */}
-              <MyLessonCalendarCard />
+              <MyLessonCalendarCard
+                onClickTitle={() => setIsCalendarModalOpen(true)}
+              />
               <LogoutButtonStyle
                 onClick={() => {
                   // router.replace('/signoff')
@@ -694,102 +702,14 @@ export default function StudentMainLayoutDnf({
 
           {/* 모달 */}
           {isCalendarModalOpen && (
-            <CalendarModal onCloseModal={() => setIsCalendarModalOpen(false)} />
-          )}
-          {isStreakModalOpen && (
-            <StreakModal onClose={() => setIsStreakModalOpen(false)} />
+            <DodonFriendsCalendarModal
+              onCloseModal={() => setIsCalendarModalOpen(false)}
+            />
           )}
         </ContentsWrapperStyle>
         <FooterMenu menuLinks={footerMenuLinks} footerRef={footerRef} />
       </BodyContainerStyle>
     </>
-  )
-}
-
-function MenuItemCalendar({ onClick }: { onClick?: () => void }) {
-  const dayNumber = new Date().getDate()
-
-  return (
-    <MenuItemStyle onClick={onClick}>
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-        <Image
-          src={Assets.Icon.Gnb.calendar}
-          alt="Calendar"
-          width={34}
-          height={34}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 10,
-            left: 0,
-            width: 34,
-            height: 24,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            pointerEvents: 'none',
-          }}>
-          <span
-            style={{
-              color: '#8A2BE2',
-              fontWeight: '900',
-              padding: '0',
-              fontSize: 11,
-            }}>
-            {dayNumber}
-          </span>
-        </div>
-      </div>
-    </MenuItemStyle>
-  )
-}
-
-function MenuItemStreak({
-  isTodayStudy,
-  streakCount,
-  isStreakLegacyMode,
-  onClick,
-}: {
-  isTodayStudy: boolean
-  streakCount: number
-  isStreakLegacyMode: boolean
-  onClick?: () => void
-}) {
-  const streakIconSrc = isTodayStudy
-    ? Assets.Icon.Side.streakDone
-    : streakCount > 0
-      ? Assets.Icon.Side.streakReadyPending
-      : Assets.Icon.Side.streakGone
-
-  return (
-    <MenuItemStyle
-      className={`menu-item-streak-with-count${isStreakLegacyMode ? ' menu-item-streak-disabled' : ''}`}
-      style={{ padding: 0 }}
-      onClick={isStreakLegacyMode ? undefined : onClick}
-      aria-disabled={isStreakLegacyMode || undefined}>
-      <div
-        style={{ position: 'relative', width: 46, height: 46, flexShrink: 0 }}>
-        <Image
-          src={streakIconSrc}
-          alt="streak"
-          width={34}
-          height={34}
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 1,
-          }}
-        />
-        <span
-          className="menu-item-streak-count-label"
-          title={String(streakCount)}>
-          {streakCount}
-        </span>
-      </div>
-    </MenuItemStyle>
   )
 }
 

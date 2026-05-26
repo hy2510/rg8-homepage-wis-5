@@ -1,11 +1,12 @@
 'use client'
 
+import CalendarModalDnf from '@/8th/features/achieve/ui/modal/CalendarModalDnf'
 import { MyLessonCalendarCardStyle } from '@/8th/shared/styled/FeaturesStyled'
 import {
   CommonTitleStyle,
   WidgetBoxStyle,
 } from '@/8th/shared/styled/SharedStyled'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 export type MyLessonCalendarDayState = 'completed' | 'prepared' | 'selected'
 
@@ -89,89 +90,106 @@ export default function MyLessonCalendarCard({
   const completedSet = useMemo(() => new Set(completedDays), [completedDays])
   const preparedSet = useMemo(() => new Set(preparedDays), [preparedDays])
 
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false)
+
+  const handleTitleClick = () => {
+    if (onClickTitle) {
+      onClickTitle()
+      return
+    }
+    setIsCalendarModalOpen(true)
+  }
+
   return (
-    <WidgetBoxStyle height="fit-content" todayGoal={false} getAward={false}>
-      <MyLessonCalendarCardStyle>
-        <CommonTitleStyle onClick={onClickTitle}>
-          {monthLabel} {year}
-        </CommonTitleStyle>
+    <>
+      <WidgetBoxStyle height="fit-content" todayGoal={false} getAward={false}>
+        <MyLessonCalendarCardStyle>
+          <CommonTitleStyle onClick={handleTitleClick}>
+            Lessons in {monthLabel} {year}
+          </CommonTitleStyle>
 
-        <div className="calendar-header" role="row">
-          {WEEK_LABELS.map((label, i) => (
-            <span key={`${label}-${i}`}>{label}</span>
-          ))}
-        </div>
+          <div className="calendar-header" role="row">
+            {WEEK_LABELS.map((label, i) => (
+              <span key={`${label}-${i}`}>{label}</span>
+            ))}
+          </div>
 
-        <div className="calendar-grid" role="grid">
-          {cells.map((day, idx) => {
-            if (day === null) {
+          <div className="calendar-grid" role="grid">
+            {cells.map((day, idx) => {
+              if (day === null) {
+                return (
+                  <div
+                    key={`e-${idx}`}
+                    className="calendar-day-cell calendar-day-cell--empty"
+                    aria-hidden
+                  />
+                )
+              }
+
+              const dow = new Date(year, month - 1, day).getDay()
+              const isSunday = dow === 0
+              const isCompleted = completedSet.has(day)
+              const isPrepared = preparedSet.has(day) && !isCompleted
+              const isSelected = selectedDay != null && selectedDay === day
+              const isToday =
+                day === today.day &&
+                month === today.month &&
+                year === today.year
+
+              const dayClasses = [
+                'calendar-day',
+                isToday && 'calendar-day--today',
+                isSunday && 'calendar-day--sunday',
+                isCompleted && 'calendar-day--completed',
+                isPrepared && 'calendar-day--prepared',
+                isSelected && 'calendar-day--selected',
+              ]
+                .filter(Boolean)
+                .join(' ')
+
               return (
-                <div
-                  key={`e-${idx}`}
-                  className="calendar-day-cell calendar-day-cell--empty"
+                <div key={day} className="calendar-day-cell">
+                  <div
+                    className={dayClasses}
+                    role="gridcell"
+                    aria-current={isToday ? 'date' : undefined}>
+                    {day}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <hr />
+
+          <div className="calendar-legend">
+            <div className="calendar-legend-row">
+              <div className="left">
+                <span
+                  className="calendar-legend-swatch calendar-legend-swatch--ready"
                   aria-hidden
                 />
-              )
-            }
-
-            const dow = new Date(year, month - 1, day).getDay()
-            const isSunday = dow === 0
-            const isCompleted = completedSet.has(day)
-            const isPrepared = preparedSet.has(day) && !isCompleted
-            const isSelected = selectedDay != null && selectedDay === day
-            const isToday =
-              day === today.day && month === today.month && year === today.year
-
-            const dayClasses = [
-              'calendar-day',
-              isToday && 'calendar-day--today',
-              isSunday && 'calendar-day--sunday',
-              isCompleted && 'calendar-day--completed',
-              isPrepared && 'calendar-day--prepared',
-              isSelected && 'calendar-day--selected',
-            ]
-              .filter(Boolean)
-              .join(' ')
-
-            return (
-              <div key={day} className="calendar-day-cell">
-                <div
-                  className={dayClasses}
-                  role="gridcell"
-                  aria-current={isToday ? 'date' : undefined}>
-                  {day}
-                </div>
+                <div className="text">Assigned</div>
               </div>
-            )
-          })}
-        </div>
-
-        <hr />
-
-        <div className="calendar-legend">
-          <div className="calendar-legend-row">
-            <div className="left">
-              <span
-                className="calendar-legend-swatch calendar-legend-swatch--ready"
-                aria-hidden
-              />
-              <div className="text">Assigned Lessons</div>
+              <div className="text-count">{legendPreparedCount}</div>
             </div>
-            <div className="text-count">{legendPreparedCount}</div>
-          </div>
 
-          <div className="calendar-legend-row">
-            <div className="left">
-              <span
-                className="calendar-legend-swatch calendar-legend-swatch--done"
-                aria-hidden
-              />
-              <div className="text">Completed Lessons</div>
+            <div className="calendar-legend-row">
+              <div className="left">
+                <span
+                  className="calendar-legend-swatch calendar-legend-swatch--done"
+                  aria-hidden
+                />
+                <div className="text">Completed</div>
+              </div>
+              <div className="text-count">{legendCompletedCount}</div>
             </div>
-            <div className="text-count">{legendCompletedCount}</div>
           </div>
-        </div>
-      </MyLessonCalendarCardStyle>
-    </WidgetBoxStyle>
+        </MyLessonCalendarCardStyle>
+      </WidgetBoxStyle>
+      {isCalendarModalOpen && !onClickTitle && (
+        <CalendarModalDnf onCloseModal={() => setIsCalendarModalOpen(false)} />
+      )}
+    </>
   )
 }

@@ -22,8 +22,9 @@ import { useTrack } from '@/external/marketing-tracker/component/MarketingTracke
 import useTranslation from '@/localization/client/useTranslations'
 import DateUtils from '@/util/date-utils'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { getActivityPaths } from '@/8th/shared/utils/activity-paths'
 
 export default function SpeakResultHistory({
   startDate,
@@ -45,10 +46,12 @@ export default function SpeakResultHistory({
   const { t } = useTranslation()
 
   const router = useRouter()
+  const pathname = usePathname()
+  const activityPaths = getActivityPaths(pathname)
 
   const onChangeDate = (startDate: string, endDate: string) => {
     router.replace(
-      `${SITE_PATH.STUDENT_8TH.REVIEW_SPEAK}?startDate=${startDate}&endDate=${endDate}`,
+      `${activityPaths.reviewSpeak}?startDate=${startDate}&endDate=${endDate}`,
     )
   }
 
@@ -60,7 +63,7 @@ export default function SpeakResultHistory({
     <>
       <SubPageNavHeader
         title={`${t('t8th047')}`}
-        parentPath={SITE_PATH.STUDENT_8TH.ACTIVITY}
+        parentPath={activityPaths.activity}
       />
       <SpeakResultHistoryList
         startDate={startDate}
@@ -87,6 +90,8 @@ function SpeakResultHistoryList({
   const { t } = useTranslation()
 
   const router = useRouter()
+  const pathname = usePathname()
+  const activityPaths = getActivityPaths(pathname)
 
   const [status, setStatus] = useState<'All' | 'Passed' | 'Failed'>('All')
 
@@ -194,11 +199,11 @@ function SpeakResultHistoryList({
 
     if (item.key === 'HistoryTypeReading') {
       router.replace(
-        `${SITE_PATH.STUDENT_8TH.REVIEW}?startDate=${pStartDate}&endDate=${pEndDate}`,
+        `${activityPaths.review}?startDate=${pStartDate}&endDate=${pEndDate}`,
       )
     } else if (item.key === 'HistoryTypeWriting') {
       router.replace(
-        `${SITE_PATH.STUDENT_8TH.REVIEW_WRITE}?startDate=${pStartDate}&endDate=${pEndDate}`,
+        `${activityPaths.reviewWrite}?startDate=${pStartDate}&endDate=${pEndDate}`,
       )
     } else if (item.key === 'HistoryTypeSpeaking') {
     }

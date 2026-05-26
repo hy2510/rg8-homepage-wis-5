@@ -38,7 +38,7 @@ export type TodoBook = {
   easyRgPoint: number
   statusCode: string
   answerCount: number
-  homeworkYn: boolean
+  assignmentsYn: boolean
   recommendedAge: string
   rgPointSum: number
   getableRgPoint: number
@@ -82,7 +82,7 @@ export function makeTodoBook(json: any): TodoBook {
     easyRgPoint: RenewType.renewNumber(json?.EasyRgPoint),
     statusCode: RenewType.renewString(json?.StatusCode),
     answerCount: RenewType.renewNumber(json?.AnswerCount),
-    homeworkYn: json?.RegistId && json?.RegistId !== json?.StudentId,
+    assignmentsYn: json?.RegistId && json?.RegistId !== json?.StudentId,
     recommendedAge: RenewType.renewString(json?.RecommendedAge),
     rgPointSum: RenewType.renewNumber(json?.RgPointSum),
     getableRgPoint: RenewType.renewNumber(json?.GetableRgPoint),

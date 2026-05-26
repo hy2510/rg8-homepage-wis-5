@@ -106,7 +106,11 @@ import DailyRgBadgeMillo from './images/daily-rg/badge/millo.png'
 import DailyRgBadgeRoro from './images/daily-rg/badge/roro.png'
 import DailyRgBadgeSheila from './images/daily-rg/badge/sheila.png'
 import DailyRgBadgeTori from './images/daily-rg/badge/tori.png'
+import DubbingDodo from './images/dodo-image/dubbing-dodo.png'
+import MovieDodo from './images/dodo-image/movie-dodo.png'
+import LoadingDodo from './images/dodo-image/welcome-dodo.png'
 import emptyResults from './images/empty-results.svg'
+import GlossyBgBigWhite25 from './images/glossy-bg-big-white-25.svg'
 import GlossyBgBigWhite from './images/glossy-bg-big-white.svg'
 import GlossyBgSmallWhite from './images/glossy-bg-small-white.svg'
 import GlossyBgSmall from './images/glossy-bg-small.svg'
@@ -182,17 +186,19 @@ import streakDone from './images/icons/side/streak_done.png'
 import streakGone from './images/icons/side/streak_gone.png'
 import streakReadyPending from './images/icons/side/streak_ready.png'
 import toDo from './images/icons/side/to-do.png'
+import assignmentsMark from './images/icons/study/assignments-mark.png'
 import checkMarkGoldTwin from './images/icons/study/check-mark-gold-twin.png'
 import checkMarkGold from './images/icons/study/check-mark-gold.png'
 import collections from './images/icons/study/collections.png'
-import homeworkMark from './images/icons/study/homework-mark.png'
 import inProgressMarkInTodo from './images/icons/study/in-progress-mark-in-todo.png'
 import inProgressMark from './images/icons/study/in-progress-mark.png'
+import lessonCheckGray from './images/icons/study/lesson-check-gray.svg'
 import lessonCheckRed from './images/icons/study/lesson-check-red.svg'
 import lessonCheckWhite from './images/icons/study/lesson-check-white.svg'
 import lessonCheckYellow from './images/icons/study/lesson-check-yellow.svg'
 import leveledReading from './images/icons/study/leveled-reading.png'
 import recentlyViewed from './images/icons/study/recently-viewed.png'
+import ZoonInGray from './images/icons/zoom-in-gray.svg'
 import ZoomIn from './images/icons/zoom-in.png'
 import profileHallOfFameBronze from './images/profile/profile_frame_bronze.png'
 import profileHallOfFameGold from './images/profile/profile_frame_gold.png'
@@ -225,7 +231,6 @@ import SightWord1Study from './images/thumbnails/pk-sight-word-1-study.jpg'
 import SightWord2Game from './images/thumbnails/pk-sight-word-2-game.png'
 import SightWord2Study from './images/thumbnails/pk-sight-word-2-study.jpg'
 import DailyRGCourseCompleted from './images/trophy.svg'
-import LoadingDodo from './images/welcome-dodo.png'
 
 /*
  * Assets 분류 구조
@@ -255,6 +260,7 @@ export const Assets = {
     AppLogoDnf: AppLogoDnf,
     GlossyBg: GlossyBg,
     GlossyBgBigWhite: GlossyBgBigWhite,
+    GlossyBgBigWhite25: GlossyBgBigWhite25,
     GlossyBgSmall: GlossyBgSmall,
     GlossyBgSmallWhite: GlossyBgSmallWhite,
     DailyRGCourseCompleted: DailyRGCourseCompleted,
@@ -265,6 +271,8 @@ export const Assets = {
     BookCoverNotAvailable: BookCoverNotAvailable,
     SchoolSubjectChooseOptionInfo: SchoolSubjectChooseOptionInfo,
     LoadingDodo: LoadingDodo,
+    DubbingDodo: DubbingDodo,
+    MovieDodo: MovieDodo,
   },
   Icon: {
     arrowDownGray: arrowDownGray,
@@ -310,6 +318,7 @@ export const Assets = {
     deleteBlack: deleteBlack,
     deleteWhite: deleteWhite,
     zoomIn: ZoomIn,
+    zoonInGray: ZoonInGray,
     Gnb: {
       bookQuiz: bookQuiz,
       calendar: calendar,
@@ -341,11 +350,12 @@ export const Assets = {
       checkMarkGoldTwin: checkMarkGoldTwin,
       checkMarkGold: checkMarkGold,
       lessonCheckWhite: lessonCheckWhite,
+      lessonCheckGray: lessonCheckGray,
       lessonCheckYellow: lessonCheckYellow,
       lessonCheckRed: lessonCheckRed,
       inProgressMark: inProgressMark,
       inProgressMarkInTodo: inProgressMarkInTodo,
-      homeworkMark: homeworkMark,
+      assignmentsMark: assignmentsMark,
       leveledReading: leveledReading,
       recentlyViewed: recentlyViewed,
       collections: collections,
