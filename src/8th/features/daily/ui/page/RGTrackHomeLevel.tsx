@@ -52,6 +52,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import LevelSelect from '../component/LevelSelect'
 
 export default function RGTrackHomeLevel({ level }: { level?: string }) {
   const router = useRouter()
@@ -249,6 +250,8 @@ export default function RGTrackHomeLevel({ level }: { level?: string }) {
 
   return (
     <>
+      <LevelSelect />
+
       <DailyRGLevelTitle
         currentLevel={queryLevel}
         onLevelChange={onDailyLevelChange}

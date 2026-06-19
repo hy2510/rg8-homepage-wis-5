@@ -3343,6 +3343,284 @@ export const ProgressBarFillStyle = styled.div<{ progressColor?: string }>`
   }
 `
 
+export const LevelSelectStyle = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 902;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+
+  .container {
+    width: 100%;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 30px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    ${phone(`
+      padding: 15px;
+      gap: 20px;
+    `)}
+
+    .group {
+      width: 100%;
+      max-width: 1080px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+  }
+
+  .description {
+    background-color: rgb(0, 185, 255, 0.1);
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .level-test-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    margin: 30px 0;
+  }
+
+  .level-test-link {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    color: var(--font-color-light-blue);
+    font-size: var(--font-size-large);
+    font-family: var(--font-family-secondary);
+    font-weight: 700;
+  }
+`
+
+export const LevelSelectCardStyle = styled.div`
+  width: 100%;
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 60px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid var(--line-color-primary);
+
+  ${phone(`
+    padding: 0;
+    padding-bottom: 20px;
+    gap: 20px;
+    border-radius: 20px;
+  `)}
+
+  .carousel {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .carousel-track {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    min-height: 200px;
+
+    ${phone(`
+      min-height: 140px;
+      grid-template-columns: 0 auto 0;
+      gap: 0;
+    `)}
+  }
+
+  .carousel-slot {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 15px;
+
+    &:first-child {
+      justify-content: flex-end;
+    }
+
+    &.center {
+      justify-content: center;
+      border-radius: 20px;
+
+      ${phone(`
+        border-radius: 20px 20px 0 0;
+      `)}
+    }
+
+    &:last-child {
+      justify-content: flex-start;
+    }
+  }
+
+  .carousel-item {
+    cursor: pointer;
+
+    &.active {
+      width: 500px;
+      cursor: default;
+
+      ${phone(`
+        width: calc(100vw - 32px);
+      `)}
+    }
+
+    &.side {
+      width: 100%;
+      opacity: 0.5;
+
+      ${tabletS(`
+        display: none;
+      `)}
+
+      &.spacer {
+        visibility: hidden;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .video-placeholder {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-gray-light);
+    overflow: hidden;
+
+    video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      pointer-events: none;
+    }
+  }
+
+  .level-nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .level-nav-arrow {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.3;
+    }
+  }
+
+  .level-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .level-tab {
+    cursor: pointer;
+    min-width: 64px;
+    min-height: 40px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 100px;
+    background-color: var(--color-gray-light);
+    color: var(--font-color-secondary);
+    font-size: var(--font-size-medium);
+    font-family: var(--font-family-secondary);
+    font-weight: 600;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    ${phone(`
+      min-width: 48px;
+      min-height: 32px;
+      padding: 0 15px;
+      font-size: var(--font-size-small);
+    `)}
+
+    &.active {
+      background-color: #3c4b62;
+      color: #fff;
+    }
+  }
+
+  .level-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    word-break: keep-all;
+  }
+
+  .start-button {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 280px;
+    min-height: 60px;
+    font-size: 1.2em;
+    font-weight: 700;
+    border: none;
+
+    ${phone(`
+      max-width: calc(100% - 30px);
+      min-height: 48px;
+      font-size: 1em;
+    `)}
+  }
+`
+
 export const DailyRGLevelStyle = styled.div`
   cursor: pointer;
   width: fit-content;
@@ -4192,9 +4470,15 @@ export const CollectionItemStyled = styled.div<{
   color: var(--font-color-primary);
   letter-spacing: -0.05em;
 
+  .label {
+    word-break: keep-all;
+  }
+
   .icon-box {
-    width: 50px;
-    height: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
     background-color: ${({ iconBgColor }) => iconBgColor};
     background-image: url(${Assets.Icon.glossyPointSmall.src});
     background-size: 7px;

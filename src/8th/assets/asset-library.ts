@@ -147,6 +147,7 @@ import deleteWhite from './images/icons/delete-white.svg'
 import deleteBlack from './images/icons/delete.svg'
 import downloadLightBlue from './images/icons/download-light-blue.svg'
 import EditGray from './images/icons/edit-gray.svg'
+import globeBlack from './images/icons/globe.svg'
 import glossyPoint2 from './images/icons/glossy-point-2.png'
 import glossyPointSmall from './images/icons/glossy-point-small.svg'
 import glossyPoint from './images/icons/glossy-point.svg'
@@ -252,6 +253,7 @@ import DailyRGCourseCompleted from './images/trophy.svg'
  * DailyRG         - Daily RG
  *   Badge         - 캐릭터 배지
  * FriendsStory    - 도도 앤 프렌즈 스토리
+ * Video           - 영상
  */
 
 export const Assets = {
@@ -319,6 +321,7 @@ export const Assets = {
     deleteWhite: deleteWhite,
     zoomIn: ZoomIn,
     zoonInGray: ZoonInGray,
+    globeBlack: globeBlack,
     Gnb: {
       bookQuiz: bookQuiz,
       calendar: calendar,
@@ -525,5 +528,13 @@ export const Assets = {
   },
   FriendsStory: {
     List: getDodoFriendsStory,
+  },
+  Video: {
+    SelectLevelSample: {
+      PreK: '/src/8th/videos/select-level-sample/prek_sample.mp4',
+      LevelK: '/src/8th/videos/select-level-sample/levelk_sample.mp4',
+      Level1: '/src/8th/videos/select-level-sample/level1_sample.mp4',
+      Level2: '/src/8th/videos/select-level-sample/level2_sample.mp4',
+    },
   },
 }
