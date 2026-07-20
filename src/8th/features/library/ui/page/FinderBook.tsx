@@ -50,7 +50,7 @@ import LevelUtils from '@/util/level-utils'
 import { useEffect, useMemo, useState } from 'react'
 import TodoBookInfoModal from '../modal/TodoBookInfoModal'
 
-const TODO_BOOK_LIMIT = 8
+const TODO_BOOK_LIMIT = 4
 
 export default function FinderBook({ booktype }: { booktype: 'eb' | 'pb' }) {
   const maketingEventTracker = useTrack()
@@ -652,14 +652,14 @@ export default function FinderBook({ booktype }: { booktype: 'eb' | 'pb' }) {
             onClickBook={onTodoBookClick}
           />
         )}
+      {menu[booktype].collections.open && (
+        <Collections bookType={booktype} list={collectionsList} />
+      )}
       {menu[booktype].readingLevel.open && (
         <LevelSectionContainer
           levelSection={findBookData.sectionData}
           defaultLevel={findBookData.defaultOpenSection}
         />
-      )}
-      {menu[booktype].collections.open && (
-        <Collections bookType={booktype} list={collectionsList} />
       )}
       {bookInfo && (
         <TodoBookInfoModal

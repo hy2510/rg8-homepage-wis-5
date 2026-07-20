@@ -2793,3 +2793,77 @@ export const ChallengeAwardBgOverlayStyle = styled.div<{ isMobile?: boolean }>`
     }
   }
 `
+
+export const AccountPageHeaderStyle = styled.div`
+  width: 100%;
+  min-height: 50px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+
+  .go-back-button {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .language-switcher {
+    position: relative;
+    width: auto;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .language-switcher-trigger {
+    cursor: pointer;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+`
+
+export const AccountPageFooterStyle = styled.footer`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  text-align: center;
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px 12px;
+
+    a {
+      color: var(--font-color-secondary);
+      font-size: var(--font-size-small);
+      font-family: var(--font-family-secondary);
+      font-weight: 500;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .copyright {
+    color: var(--font-color-secondary);
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-secondary);
+    font-weight: 500;
+  }
+`

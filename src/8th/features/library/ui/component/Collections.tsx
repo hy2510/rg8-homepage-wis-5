@@ -99,8 +99,8 @@ export default function Collections({
       </BoxStyle>
       <BoxStyle
         display="grid"
-        gridTemplateColumns={`repeat(${isPhone ? 1 : 2}, 1fr)`}
-        gap={isPhone ? 10 : 15}>
+        gridTemplateColumns={`repeat(${isPhone ? 1 : 3}, 1fr)`}
+        gap={10}>
         <CollectionList bookType={bookType} list={list} />
       </BoxStyle>
     </CollectionsStyled>
@@ -209,8 +209,14 @@ export function CollectionItem({
           display="flex"
           alignItems="center"
           justifyContent="space-between"
+          gap={5}
           width="100%">
-          <BoxStyle display="flex" alignItems="center" gap={15}>
+          <BoxStyle
+            display="flex"
+            alignItems="center"
+            gap={12}
+            flex="1"
+            minWidth="0">
             <div className="icon-box">
               <Image
                 src={iconSrc}
@@ -220,18 +226,20 @@ export function CollectionItem({
               />
             </div>
             <TextStyle
-              fontFamily="rg-b"
-              fontSize="large"
-              fontWeight={children === '교과 연계 도서' ? 800 : 500}>
+              className="label"
+              fontFamily="sans"
+              fontWeight={700}
+              fontColor="primary"
+              width="100%">
               {children}
             </TextStyle>
           </BoxStyle>
-          <Image
+          {/* <Image
             src={Assets.Icon.chevronRightGray}
             alt="chevron-right"
             width={22}
             height={22}
-          />
+          /> */}
         </BoxStyle>
       </Link>
     </CollectionItemStyled>
