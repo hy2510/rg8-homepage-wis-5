@@ -142,6 +142,7 @@ const STUDENT_8TH = {
   REVIEW: '/8th/activity/result',
   REVIEW_WRITE: '/8th/activity/result/write',
   REVIEW_SPEAK: '/8th/activity/result/speak',
+  PRACTICE: '/8th/practice',
   RANKING: '/8th/ranking',
   ACCOUNTINFO: '/8th/accountinfo',
   ACCOUNTINFO_SETTING: '/8th/accountinfo/setting',

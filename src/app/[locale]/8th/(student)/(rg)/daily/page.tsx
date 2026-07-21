@@ -9,6 +9,6 @@ export default async function Page({
   const { stage, level } = await searchParams
 
   // MEMO: 1 + 1 === 4 는 기존 레거시 DailyRG 보기 위한 장치
-  if (1 + 1 === 4) return <DailyRGHome stage={stage} />
+  if (1 + 1 === 2) return <DailyRGHome stage={stage} />
   return <RGTrackHomeLevel level={level} />
 }

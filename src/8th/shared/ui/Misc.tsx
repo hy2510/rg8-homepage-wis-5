@@ -579,6 +579,8 @@ interface DropdownProps {
   mediumFont?: boolean
   placeholder?: string
   minWidth?: number
+  menuPosition?: 'left' | 'right'
+  className?: string
 }
 
 export function Dropdown({
@@ -589,6 +591,8 @@ export function Dropdown({
   mediumFont = false,
   placeholder = 'Select',
   minWidth = 0,
+  menuPosition = 'left',
+  className,
 }: DropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [isMenuOpen, setMenuOpen] = useState(false)
@@ -617,6 +621,7 @@ export function Dropdown({
   return (
     <DropdownButtonSmallContainerStyle
       ref={dropdownRef}
+      className={className}
       style={{ minWidth: minWidth ? `${minWidth}px` : undefined }}>
       <DropdownButtonSmallStyle onClick={() => setMenuOpen(!isMenuOpen)}>
         <div
@@ -636,7 +641,7 @@ export function Dropdown({
         </div>
       </DropdownButtonSmallStyle>
       {isMenuOpen && options.length > 0 && (
-        <DropdownSmallMenuStyle position="left">
+        <DropdownSmallMenuStyle position={menuPosition}>
           {options.map((option) => {
             const isSelected = option.label === selectedValue
             return (

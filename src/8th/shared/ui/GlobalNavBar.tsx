@@ -216,11 +216,16 @@ export default function GlobalNavBar() {
 
         {menu.calendar.open && (
           <DisplayNoneStyle $hideOnLabtopS>
-            {/* // 더빙룸 메뉴 제거
-          <div className="divider" />
-          <Gap size={10} />
-          <MenuItem icon={Assets.Icon.Gnb.dubbing} text="DUBBING" /> 
-          */}
+            <div className="divider" />
+            <Gap size={10} />
+            <MenuItem
+              icon={Assets.Icon.Gnb.practice}
+              text="PRACTICE"
+              isActive={pathname.includes(SITE_PATH.STUDENT_8TH.PRACTICE)}
+              linkUrl={SITE_PATH.STUDENT_8TH.PRACTICE}
+            />
+            {/* 더빙룸 메뉴 제거 */}
+            <MenuItem icon={Assets.Icon.Gnb.dubbing} text="DUBBING" />
             <Gap size={10} />
             <div className="divider" />
             <Gap size={10} />

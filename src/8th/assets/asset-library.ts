@@ -108,6 +108,7 @@ import DailyRgBadgeSheila from './images/daily-rg/badge/sheila.png'
 import DailyRgBadgeTori from './images/daily-rg/badge/tori.png'
 import DubbingDodo from './images/dodo-image/dubbing-dodo.png'
 import MovieDodo from './images/dodo-image/movie-dodo.png'
+import PracticeDodo from './images/dodo-image/practice-dodo.png'
 import LoadingDodo from './images/dodo-image/welcome-dodo.png'
 import emptyResults from './images/empty-results.svg'
 import GlossyBgBigWhite25 from './images/glossy-bg-big-white-25.svg'
@@ -160,6 +161,7 @@ import more from './images/icons/gnb/more.png'
 import movies from './images/icons/gnb/movies.png'
 import myActivity from './images/icons/gnb/my-activity.png'
 import myClass from './images/icons/gnb/my-class.png'
+import practice from './images/icons/gnb/practice.png'
 import readingPath from './images/icons/gnb/reading-path.png'
 import lockWhite from './images/icons/lock-white.svg'
 import lock from './images/icons/lock.svg'
@@ -275,6 +277,7 @@ export const Assets = {
     LoadingDodo: LoadingDodo,
     DubbingDodo: DubbingDodo,
     MovieDodo: MovieDodo,
+    PracticeDodo: PracticeDodo,
   },
   Icon: {
     arrowDownGray: arrowDownGray,
@@ -334,6 +337,7 @@ export const Assets = {
       myActivity: myActivity,
       movies: movies,
       myClass: myClass,
+      practice: practice,
     },
     Side: {
       booksRead: booksRead,
